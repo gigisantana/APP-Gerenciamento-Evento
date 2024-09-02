@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\evento;
+use App\Models\Evento;
 use Dompdf\Dompdf;
 
 class EventoController extends Controller
@@ -12,8 +12,8 @@ class EventoController extends Controller
     {
         $this->authorize('index', Evento::class);
 
-        $data = Evento::all();
-        return view('evento.index', compact(['data']));
+        $evento = Evento::all();
+        return view('evento.index', compact(['evento']));
     }
 
     public function create() 
@@ -33,6 +33,8 @@ class EventoController extends Controller
             $evento = new Evento();
             $evento->nome = $request->nome;
             $evento->descricao = $request->descricao;
+            $evento->data_inicio = $request->data_inicio;
+            $evento->data_fim = $request->data_fim;
             $evento->save();
 
             $ext = $request->file('documento')->getClientOriginalExtension();
@@ -113,7 +115,7 @@ class EventoController extends Controller
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('evento.pdf', compact('data')));
         $dompdf->render();
-        $dompdf->stream("relatorio-horas-atividade.pdf", 
+        $dompdf->stream("relatorio-horas-evento.pdf", 
             array("Attachment" => false));
     }
 }

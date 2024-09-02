@@ -5,19 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Evento extends Model
+class Atividade extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'nome',
         'descricao',
-        'data_inicio',
-        'data_fim',
+        'data',
+        'hora_inicio',
+        'hora_fim',
+        'evento_id',
     ];
 
-    public function atividades()
+    public function evento()
     {
-        return $this->hasMany(Atividade::class);
+        return $this->belongsTo(Evento::class);
     }
 }
