@@ -15,7 +15,7 @@ class AtividadeController extends Controller
     public function index()
     {
         $atividades = Atividade::with('atividades')->paginate(10);
-        return view('atividades.index', compact('atividades'));
+        return view('atividade.index', compact('atividades'));
     }
 
     /**
