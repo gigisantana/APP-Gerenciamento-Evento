@@ -49,4 +49,10 @@ Route::put('/atividades/{id}', [AtividadeController::class, 'update'])->name('at
 // Excluir uma atividade existente
 Route::delete('/atividades/{id}', [AtividadeController::class, 'destroy'])->name('atividades.destroy');
 
+//rota p registrar
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
 require __DIR__.'/auth.php';
