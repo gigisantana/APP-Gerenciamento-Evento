@@ -50,8 +50,9 @@ Route::put('/atividades/{id}', [AtividadeController::class, 'update'])->name('at
 Route::delete('/atividades/{id}', [AtividadeController::class, 'destroy'])->name('atividades.destroy');
 
 //rota p registrar
-Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::get('/profile/register', [ProfileController::class, 'showRegistrationForm'])->name('profile.register');
+Route::put('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
