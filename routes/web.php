@@ -16,8 +16,8 @@ use App\Http\Controllers\AtividadeController;
 */
 
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    return view('home');
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -49,11 +49,21 @@ Route::put('/atividades/{id}', [AtividadeController::class, 'update'])->name('at
 // Excluir uma atividade existente
 Route::delete('/atividades/{id}', [AtividadeController::class, 'destroy'])->name('atividades.destroy');
 
-//rota p registrar
+// Rota para login
+Route::get('/login', function(){
+    return view('login');
+})->name('login');
+
+// Rota para registro
 Route::get('/profile/register', [ProfileController::class, 'showRegistrationForm'])->name('profile.register');
 Route::put('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
+// Rota para a página de descrição do projeto
+Route::get('sobre', function(){
+    return view('sobre');
+})->name('sobre');
 
 require __DIR__.'/auth.php';
