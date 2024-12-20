@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AtividadeController;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,4 +67,16 @@ Route::get('sobre', function(){
     return view('sobre');
 })->name('sobre');
 
+Route::get('/send-test-email', function () {
+    Mail::raw('Este é um teste de envio de e-mail via Mailtrap.', function ($message) {
+        $message->to('destinatario@exemplo.com')
+                ->subject('Teste de E-mail');
+    });
+    return 'E-mail enviado!';
+});
+
+
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
 require __DIR__.'/auth.php';
