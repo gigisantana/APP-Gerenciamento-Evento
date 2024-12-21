@@ -10,10 +10,8 @@ class EventoController extends Controller
 {
     public function index() 
     {
-        $this->authorize('index', Evento::class);
-
         $evento = Evento::all();
-        return view('evento.index', compact(['evento']));
+        return view('evento.index', compact('evento'));
     }
 
     public function create() 
@@ -52,13 +50,11 @@ class EventoController extends Controller
      */
     public function show(string $id)
     {
-        $this->authorize('show', Evento::class);
-
         $evento = Evento::find($id);
-        if(isset($evento)) {
+        //if(isset($evento)) {
             return view('evento.show', compact(['evento']));
-        }
-        return "<h1>ERRO: EVENTO NÃO ENCONTRADO!</h1>";
+        //}
+        //return "<h1>ERRO: EVENTO NÃO ENCONTRADO!</h1>";
     }
 
     /**

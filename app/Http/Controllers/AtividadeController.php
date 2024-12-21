@@ -12,10 +12,11 @@ class AtividadeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($eventoId)
     {
-        $atividades = Atividade::with('atividades')->paginate(10);
-        return view('atividade.index', compact('atividades'));
+        $evento = Evento::findOrFail($eventoId);
+        $atividade = $evento->atividade;
+        return view('atividade.index', compact('evento', 'atividade'));
     }
 
     /**
@@ -26,7 +27,7 @@ class AtividadeController extends Controller
         $this->authorize('index', Atividade::class);
 
         $atividade = Atividade::all();
-        return view('atividades.create', compact('atividade'));
+        return view('atividade.create', compact('atividade'));
     }
 
     /**
@@ -58,13 +59,12 @@ class AtividadeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($eventoId, $id)
     {
-        $this->authorize('show', Atividade::class);
-
-        $atividade = Atividade::find($id);
+        $evento = Evento::findOrFail($eventoId);
+        $atividade = $evento->atividade()->findOrFail($id);
         if(isset($atividade)) {
-            return view('atividade.show', compact(['atividade']));
+            return view('atividade.show', compact('evento', 'atividade'));
         }
         return "<h1>ERRO: ATIVIDADE NÃO ENCONTRADO!</h1>";
     }

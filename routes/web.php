@@ -1,82 +1,50 @@
 <?php
 
+use App\Http\Controllers\AtividadeController;
+use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AtividadeController;
-use Illuminate\Support\Facades\Mail;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::get('/', function () {
-    return view('home');
-})->name('home');
+    return view('welcome');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('/evento', 'App\Http\Controllers\EventoController');
-Route::get('/report/evento', 'App\Http\Controllers\EventoController@report')->name('report');
-// Route::get('graph/evento', 'App\Http\Controllers\EventoController@graph')->name('graph');
-
-Route::resource('/atividades', AtividadeController::class);
-// Exibir a listagem de atividades
-Route::get('/atividades', [AtividadeController::class, 'index'])->name('atividades.index');
-
-// Mostrar o formulário para criar uma nova atividade
-Route::get('/atividades/create', [AtividadeController::class, 'create'])->name('atividades.create');
-
-// Armazenar uma nova atividade
-Route::post('/atividades', [AtividadeController::class, 'store'])->name('atividades.store');
-
-// Exibir os detalhes de uma atividade específica
-Route::get('/atividades/{id}', [AtividadeController::class, 'show'])->name('atividades.show');
-
-// Mostrar o formulário para editar uma atividade existente
-Route::get('/atividades/{id}/edit', [AtividadeController::class, 'edit'])->name('atividades.edit');
-
-// Atualizar uma atividade existente
-Route::put('/atividades/{id}', [AtividadeController::class, 'update'])->name('atividades.update');
-
-// Excluir uma atividade existente
-Route::delete('/atividades/{id}', [AtividadeController::class, 'destroy'])->name('atividades.destroy');
-
-// Rota para login
-Route::get('/login', function(){
-    return view('login');
-})->name('login');
-
-// Rota para registro
-Route::get('/profile/register', [ProfileController::class, 'showRegistrationForm'])->name('profile.register');
-Route::put('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
-// Rota para a página de descrição do projeto
-Route::get('sobre', function(){
-    return view('sobre');
-})->name('sobre');
-
-Route::get('/send-test-email', function () {
-    Mail::raw('Este é um teste de envio de e-mail via Mailtrap.', function ($message) {
-        $message->to('destinatario@exemplo.com')
-                ->subject('Teste de E-mail');
-    });
-    return 'E-mail enviado!';
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Lista todos os eventos
+Route::get('/evento', [EventoController::class, 'index'])->name('evento.index');
+// Mostra detalhes do evento
+Route::get('/evento/{id}', [EventoController::class, 'show'])->name('evento.show');
+// Lista as atividades do evento
+Route::get('/evento/{eventoId}/atividade', [AtividadeController::class, 'index'])->name('atividade.index');
+// Mostra detalhes da atividade
+Route::get('/evento/{eventoId}/atividade/{id}', [AtividadeController::class, 'show'])->name('atividade.show');
 
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+
+// Gerencia evento (precisa estar autenticado)
+Route::middleware('auth')->group(function(){
+    Route::get('/evento/create', [EventoController::class, 'create'])->name('evento.create');
+    Route::post('/evento', [EventoController::class, 'store'])->name('evento.store');
+    Route::get('/evento/{id}/edit', [EventoController::class, 'edit'])->name('evento.edit');
+    Route::put('/evento/{id}', [EventoController::class, 'update'])->name('evento.update');
+    Route::delete('/evento/{id}', [EventoController::class, 'destroy'])->name('evento.destroy');
+});
+
+// Gerencia atividade
+Route::middleware('auth')->group(function(){
+    Route::get('/evento/{eventoId}/atividade/create', [AtividadeController::class, 'create'])->name('atividade.create');
+    Route::post('/evento/{eventoId}/atividade', [AtividadeController::class, 'store'])->name('atividade.store');
+    Route::get('/evento/{eventoId}/atividade/{id}/edit', [AtividadeController::class, 'edit'])->name('atividade.edit');
+    Route::put('/evento/{eventoId}/atividade/{id}', [AtividadeController::class, 'update'])->name('atividade.update');
+    Route::delete('/evento/{eventoId}/atividade/{id}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
+});
+
 require __DIR__.'/auth.php';
