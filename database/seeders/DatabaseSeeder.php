@@ -12,11 +12,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            RoleSeeder::class,
+            UserSeeder::class,
+            EventoSeeder::class,
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // Associando papéis aos usuários
+        $coordenador = \App\Models\User::where('email', 'coordenador@ifpr.edu.br')->first();
+        $organizador = \App\Models\User::where('email', 'organizador@example.com')->first();
+        $inscrito = \App\Models\User::where('email', 'inscrito@example.com')->first();
+
+        $roleCoordenador = \App\Models\Role::where('nome', 'coordenador')->first();
+        $roleOrganizador = \App\Models\Role::where('nome', 'organizador')->first();
+        $roleInscrito = \App\Models\Role::where('nome', 'inscrito')->first();
+
+        // Atribuir papéis ao usuário
+        $coordenador->roles()->attach($roleCoordenador->id, ['evento_id' => 1]);
+        $organizador->roles()->attach($roleOrganizador->id, ['evento_id' => 1]);
+        $inscrito->roles()->attach($roleInscrito->id, ['evento_id' => 1]);
     }
 }

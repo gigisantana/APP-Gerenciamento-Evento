@@ -22,12 +22,15 @@ class AtividadeController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($eventoId)
     {
         $this->authorize('index', Atividade::class);
-
-        $atividade = Atividade::all();
-        return view('atividade.create', compact('atividade'));
+        if (auth()->user()->hasRole('organizador', $eventoId)) {
+            $atividade = Atividade::all();
+            return view('atividade.create', compact('atividade'));
+        } else {
+            abort(403, 'Acesso negado.');
+        }
     }
 
     /**

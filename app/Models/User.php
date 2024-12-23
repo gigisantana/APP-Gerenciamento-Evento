@@ -18,7 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nome',
         'email',
         'password',
         'role_id',
@@ -43,4 +43,28 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         //'password' => 'hashed',
     ];
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'permissions')
+                    ->withPivot('evento_id')
+                    ->withTimestamps();
+    }
+
+    public function hasRole($roleNome, $eventoId)
+    {
+        return $this->roles()
+                    ->where('nome', $roleNome)
+                    ->wherePivot('evento_id', $eventoId)
+                    ->exists();
+    }
+
+    public function hasPermission($permission)
+    {
+        return $this->roles->flatMap->permissions->pluck('nome')->contains($permission);
+    }
+
+    public function registro(){
+        return $this->hasMany(Registro::class);
+    }
 }

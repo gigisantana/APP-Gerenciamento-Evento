@@ -9,7 +9,16 @@ class Role extends Model
 {
     use HasFactory;
 
-    public function resource() {
-        return $this->belongsToMany('App\Models\Resource', 'permissions');
+    protected $fillable = [
+        'nome',
+        'descricao',
+    ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'permissions')
+                    // Inclui o evento na relação
+                    ->withPivot('evento_id') 
+                    ->withTimestamps();
     }
 }

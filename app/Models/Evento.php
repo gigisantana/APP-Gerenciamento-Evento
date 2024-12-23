@@ -20,4 +20,16 @@ class Evento extends Model
     {
         return $this->hasMany(Atividade::class);
     }
+
+    public function registros()
+    {
+        return $this->hasMany(Registro::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'permissions')
+                    ->withPivot('role_id') // Inclui o papel do usuário no evento
+                    ->withTimestamps();
+    }
 }
