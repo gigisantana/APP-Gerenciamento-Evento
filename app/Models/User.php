@@ -51,12 +51,12 @@ class User extends Authenticatable implements MustVerifyEmail
                     ->withTimestamps();
     }
 
-    public function hasRole($roleNome, $eventoId)
+    public function hasRole( $roleName, $eventoId)
     {
         return $this->roles()
-                    ->where('nome', $roleNome)
-                    ->wherePivot('evento_id', $eventoId)
-                    ->exists();
+                ->wherePivot('evento_id', $eventoId)
+                ->where('nome', $roleName)
+                ->exists();
     }
 
     public function hasPermission($permission)
@@ -64,7 +64,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->roles->flatMap->permissions->pluck('nome')->contains($permission);
     }
 
-    public function registro(){
-        return $this->hasMany(Registro::class);
+    public function registros()
+    {
+        return $this->belongsToMany(Evento::class, 'registros')
+                    ->withPivot('role_id')
+                    ->withTimestamps();
     }
 }

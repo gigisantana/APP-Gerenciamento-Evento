@@ -16,4 +16,12 @@ class Permission extends Model
     public function resource() {
         return $this->belongsTo('App\Models\Resource');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'permissions')
+                    ->withPivot(['evento_id'])
+                    ->withTimestamps();
+    }
+
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Evento;
+use App\Models\Role;
+use App\Models\User;
 use Dompdf\Dompdf;
 
 class EventoController extends Controller
@@ -14,11 +16,24 @@ class EventoController extends Controller
         return view('evento.index', compact('evento'));
     }
 
-    public function create() 
-    {
-        $this->authorize('create', Evento::class);
-        return view('evento.create');
+    public function create()
+{
+    // Verifica se o e-mail é de um servidor do IFPR
+    $userEmail = auth()->user()->email;
+
+    if (!$this->isServidorIfpr($userEmail)) {
+        abort(403, 'Somente servidores do IFPR podem criar eventos.');
     }
+
+    return view('evento.create');
+}
+
+// Método para verificar domínio do e-mail
+    private function isServidorIfpr($email)
+    {
+        return str_ends_with($email, '@ifpr.edu.br');
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -113,5 +128,30 @@ class EventoController extends Controller
         $dompdf->render();
         $dompdf->stream("relatorio-horas-evento.pdf", 
             array("Attachment" => false));
+    }
+
+    public function addOrganizador(Request $request, Evento $evento)
+    {
+        // Autoriza apenas coordenadores a vincular organizadores
+        $this->authorize('addOrganizador', $evento);
+
+        // Verifica se o usuário com o e-mail informado existe
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->withErrors(['email' => 'Usuário com este e-mail não encontrado.']);
+        }
+
+        // Recupera a role de organizador
+        $organizadorRole = Role::where('nome', 'organizador')->first();
+
+        if (!$organizadorRole) {
+            return back()->withErrors(['role' => 'Role de organizador não encontrada.']);
+        }
+
+        // Vincula o organizador ao evento com a permissão
+        $user->roles()->attach($organizadorRole->id, ['evento_id' => $evento->id]);
+
+        return back()->with('success', 'Organizador vinculado com sucesso!');
     }
 }

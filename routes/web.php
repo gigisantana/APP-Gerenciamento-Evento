@@ -31,11 +31,16 @@ Route::get('/evento/{eventoId}/atividade/{id}', [AtividadeController::class, 'sh
 
 // Gerencia evento (precisa estar autenticado)
 Route::middleware('auth')->group(function(){
-    Route::get('/evento/create', [EventoController::class, 'create'])->name('evento.create');
-    Route::post('/evento', [EventoController::class, 'store'])->name('evento.store');
-    Route::get('/evento/{id}/edit', [EventoController::class, 'edit'])->name('evento.edit');
-    Route::put('/evento/{id}', [EventoController::class, 'update'])->name('evento.update');
-    Route::delete('/evento/{id}', [EventoController::class, 'destroy'])->name('evento.destroy');
+    Route::middleware(['verify.ifpr.email'])->group(function () {
+        Route::prefix('eventos')->group(function () {
+            Route::get('/', [EventoController::class, 'index'])->name('eventos.index');
+            Route::get('/criar', [EventoController::class, 'create'])->name('eventos.create');
+            Route::post('/store', [EventoController::class, 'store'])->name('eventos.store');
+            Route::get('/{id}/edit', [EventoController::class, 'edit'])->name('evento.edit');
+            Route::put('/{id}', [EventoController::class, 'update'])->name('evento.update');
+            Route::delete('/{id}', [EventoController::class, 'destroy'])->name('evento.destroy');
+        });
+    });
 });
 
 // Gerencia atividade

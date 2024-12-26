@@ -32,4 +32,9 @@ class Evento extends Model
                     ->withPivot('role_id') // Inclui o papel do usuário no evento
                     ->withTimestamps();
     }
+
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class);
+    }
 }

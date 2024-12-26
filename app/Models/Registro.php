@@ -12,7 +12,7 @@ class Registro extends Model
     protected $fillable = [
         'user_id',
         'evento_id',
-        'role', // coordenador, organizador, inscrito
+        'role_id', // coordenador, organizador, inscrito
     ];
 
     // Relação com o usuário

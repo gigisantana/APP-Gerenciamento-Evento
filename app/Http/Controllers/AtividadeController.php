@@ -25,6 +25,7 @@ class AtividadeController extends Controller
     public function create($eventoId)
     {
         $this->authorize('index', Atividade::class);
+
         if (auth()->user()->hasRole('organizador', $eventoId)) {
             $atividade = Atividade::all();
             return view('atividade.create', compact('atividade'));
