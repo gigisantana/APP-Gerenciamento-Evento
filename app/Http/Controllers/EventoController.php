@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Evento;
+use App\Models\Registro;
 use App\Models\Role;
 use App\Models\User;
 use Dompdf\Dompdf;
@@ -142,16 +143,15 @@ class EventoController extends Controller
             return back()->withErrors(['email' => 'Usuário com este e-mail não encontrado.']);
         }
 
-        // Recupera a role de organizador
-        $organizadorRole = Role::where('nome', 'organizador')->first();
-
-        if (!$organizadorRole) {
-            return back()->withErrors(['role' => 'Role de organizador não encontrada.']);
+        // Vincula o usuário a role de organizador
+        $role = Role::where('nome', 'organizador')->first();
+        if ($role) {
+            Registro::updateOrCreate([
+                'user_id' => $user->id,
+                'evento_id' => $evento->id,
+                'role_id' => $role->id,
+            ]);
         }
-
-        // Vincula o organizador ao evento com a permissão
-        $user->roles()->attach($organizadorRole->id, ['evento_id' => $evento->id]);
-
         return back()->with('success', 'Organizador vinculado com sucesso!');
     }
 }

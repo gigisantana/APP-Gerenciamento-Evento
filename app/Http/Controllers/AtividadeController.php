@@ -9,9 +9,6 @@ use Dompdf\Dompdf;
 
 class AtividadeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index($eventoId)
     {
         $evento = Evento::findOrFail($eventoId);
@@ -19,24 +16,34 @@ class AtividadeController extends Controller
         return view('atividade.index', compact('evento', 'atividade'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create($eventoId)
+    public function create(Request $request, Evento $evento)
     {
-        $this->authorize('index', Atividade::class);
+        $this->authorize('manageActivities', $evento);
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'descricao' => 'nullable|string',
+            'data' => 'required|date',
+            'hora_inicio' => 'required|date_format:H:i',
+            'hora_fim' => 'required|date_format:H:i|after:hora_inicio',
+        ]);
 
-        if (auth()->user()->hasRole('organizador', $eventoId)) {
-            $atividade = Atividade::all();
-            return view('atividade.create', compact('atividade'));
-        } else {
-            abort(403, 'Acesso negado.');
-        }
+        $atividade = new Atividade([
+            'nome' => $request->nome,
+            'descricao' => $request->descricao,
+            'data' => $request->data,
+            'hora_inicio' => $request->hora_inicio,
+            'hora_fim' => $request->hora_fim,
+            'evento_id' => $evento->id,
+        ]);
+        $atividade->save();
+
+        return response()->json([
+            'message' => 'Atividade criada com sucesso!',
+            'atividade' => $atividade,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         $this->authorize('create', Atividade::class);
