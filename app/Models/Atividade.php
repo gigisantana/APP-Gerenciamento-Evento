@@ -18,6 +18,10 @@ class Atividade extends Model
         'evento_id',
     ];
 
+    protected $casts = [
+        'data' => 'date',
+    ];
+
     public function evento()
     {
         return $this->belongsTo(Evento::class);

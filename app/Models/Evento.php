@@ -16,6 +16,11 @@ class Evento extends Model
         'data_fim',
     ];
 
+    protected $casts = [
+        'data_inicio' => 'datetime',
+        'data_fim' => 'datetime',
+        ];
+
     public function atividades()
     {
         return $this->hasMany(Atividade::class);

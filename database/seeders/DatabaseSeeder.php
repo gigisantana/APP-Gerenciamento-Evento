@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             EventoSeeder::class,
+            AtividadeSeeder::class,
         ]);
 
         // Associando papéis aos usuários

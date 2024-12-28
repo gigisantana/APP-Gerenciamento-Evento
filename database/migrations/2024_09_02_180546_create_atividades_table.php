@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome');
             $table->string('descricao')->nullable();
+            $table->string('data');
             $table->string('hora_inicio');
             $table->string('hora_fim');
             $table->unsignedBigInteger('evento_id');

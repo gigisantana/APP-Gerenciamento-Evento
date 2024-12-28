@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-lime-600 border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -38,7 +38,7 @@
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Editar o perfil') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('incricoes')">
+                            <x-dropdown-link :href="route('profile.incricoes')">
                                 {{ __('Inscrições') }}
                             </x-dropdown-link>
 
