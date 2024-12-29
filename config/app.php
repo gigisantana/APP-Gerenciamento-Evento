@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Gestor de Eventos - IFPR'),
 
     /*
     |--------------------------------------------------------------------------
