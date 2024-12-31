@@ -64,9 +64,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->roles->flatMap->permissions->pluck('nome')->contains($permission);
     }
 
-    public function registros()
+    public function registro()
     {
-        return $this->belongsToMany(Evento::class, 'registros')
+        return $this->belongsToMany(Evento::class, 'registro')
                     ->withPivot('role_id')
                     ->withTimestamps();
     }

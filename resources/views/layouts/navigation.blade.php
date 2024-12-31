@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="border-b bg-white">
+<nav x-data="{ open: false }" class="border-b bg-lime-50">
     <!-- Primary Navigation Menu -->
     <div class="mx-auto px-4 sm:px-6 lg:px-8 ">
         <div class="flex justify-between h-16">
@@ -41,7 +41,7 @@
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Editar o perfil') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('profile.incricoes')">
+                            <x-dropdown-link :href="route('profile.inscricoes')">
                                 {{ __('Inscrições') }}
                             </x-dropdown-link>
 
@@ -101,7 +101,7 @@
                     <x-responsive-nav-link :href="route('profile.edit')">
                         {{ __('Editar Perfil') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('inscricoes')">
+                    <x-responsive-nav-link :href="route('profile.inscricoes')">
                         {{ __('Inscrições') }}
                     </x-responsive-nav-link>
 

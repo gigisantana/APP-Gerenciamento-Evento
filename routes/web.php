@@ -3,11 +3,12 @@
 use App\Http\Controllers\AtividadeController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegistroController;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::get('/', [EventoController::class, 'eventosProximos'])->name('dashboard');
 
 Route::get('/sobre', function () {
     return view('sobre');
@@ -25,17 +26,19 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
         Route::get('/inscricoes', [ProfileController::class, 'inscricoes'])->name('profile.inscricoes');
     });
+    // Inscrição em atividade
+    Route::post('/eventos/{id}/atividades/{atividade_id}/inscricao', [RegistroController::class, 'inscrever'])->name('registro.inscrever');
 });
 
 Route::prefix('eventos')->group(function () {
     // Lista todos os eventos
     Route::get('/', [EventoController::class, 'index'])->name('evento.index');
     // Mostra detalhes do evento
-    Route::get('/{evento}', [EventoController::class, 'show'])->name('evento.show');
+    Route::get('/{id}', [EventoController::class, 'show'])->name('evento.show');
     // Lista as atividades do evento
-    Route::get('/{evento}/atividades', [AtividadeController::class, 'index'])->name('atividade.index');
+    Route::get('/{id}/atividades', [AtividadeController::class, 'index'])->name('atividade.index');
     // Mostra detalhes da atividade
-    Route::get('/{evento}/atividades/{id}', [AtividadeController::class, 'show'])->name('atividade.show');
+    Route::get('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'show'])->name('atividade.show');
 });
 
 // Gerencia evento (precisa estar autenticado e verificado como servidor)
@@ -54,13 +57,13 @@ Route::middleware('auth')->group(function(){
 });
 
 // Gerencia atividade (precisa estar autenticado e vinculado ao evento)
-Route::middleware('auth')->group(function(){
+Route::middleware('auth', 'verified')->group(function(){
     Route::prefix('eventos')->group(function () {
-        Route::get('/{evento}/atividades/create', [AtividadeController::class, 'create'])->name('atividade.create');
-        Route::post('/{evento}/atividades', [AtividadeController::class, 'store'])->name('atividade.store');
-        Route::get('/{evento}/atividades/{id}/edit', [AtividadeController::class, 'edit'])->name('atividade.edit');
-        Route::put('/{evento}/atividades/{id}', [AtividadeController::class, 'update'])->name('atividade.update');
-        Route::delete('/{evento}/atividades/{id}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
+        Route::get('/{id}/atividades/create', [AtividadeController::class, 'create'])->name('atividade.create');
+        Route::post('/{id}/atividades', [AtividadeController::class, 'store'])->name('atividade.store');
+        Route::get('/{id}/atividades/{atividade_id}/edit', [AtividadeController::class, 'edit'])->name('atividade.edit');
+        Route::put('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'update'])->name('atividade.update');
+        Route::delete('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
     });
 });
 

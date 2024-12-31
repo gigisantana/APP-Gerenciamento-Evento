@@ -26,7 +26,7 @@ class Evento extends Model
         return $this->hasMany(Atividade::class);
     }
 
-    public function registros()
+    public function registro()
     {
         return $this->hasMany(Registro::class);
     }

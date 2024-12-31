@@ -1,23 +1,14 @@
 <!-- Página pra explicar o TCC  -->
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Sobre | Gestor de Eventos - IFPR</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-    </head>
-    <body>
-        <x-app-layout>
-            <div class="">
-                <div class="mx-auto sm:px-6 lg:px-8 bg-lime-500 px-10 py-12">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg align-top justify-between">
-                </div>
-            </div>
-        </x-app-layout>
-    </body>
-</html>
+@extends('layouts.app')
+@section('content')
+    <div class="p-6 basis-2/5">
+        <h1 class="text-2xl font-bold text-lime-700 mb-4">Sobre o projeto</h1>
+        <p class="text-gray-500">Aqui você encontra os eventos próximos Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore dicta voluptate ducimus non necessitatibus, neque expedita fugiat quos. Quam fugiat quisquam eaque tempora vero repellat, officia ducimus minima at dolores? </p>
+        <p class="text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero facilis voluptate, tempora repellendus nobis ipsum tempore error eaque quod commodi porro corporis vero aperiam dignissimos consequuntur quas quis? Minima, culpa. </p>
+        <p class="text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero facilis voluptate, tempora repellendus nobis ipsum tempore error eaque quod commodi porro corporis vero aperiam dignissimos consequuntur quas quis? Minima, culpa. </p>
+    </div>
+    <div class="p-6 basis-3/5 px-8"> 
+        <h1 class="text-2xl font-bold text-lime-700 ">Pipipi popopo</h1>
+        <p class="text-gray-500">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam distinctio pariatur unde expedita quibusdam vero minima rerum vel necessitatibus ad qui autem aperiam, rem, praesentium sequi, architecto iure totam id!</p>
+    </div>
+@endsection

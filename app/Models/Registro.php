@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Registro extends Model
 {
     use HasFactory;
+    protected $table = 'registro'; // se tirar isso aqui vai dar problema no BD, já que o nome tá no singular
 
     protected $fillable = [
         'user_id',
