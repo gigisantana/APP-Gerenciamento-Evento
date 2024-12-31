@@ -26,4 +26,9 @@ class Atividade extends Model
     {
         return $this->belongsTo(Evento::class);
     }
+
+    public function registros()
+    {
+        return $this->hasMany(Registro::class);
+    }
 }

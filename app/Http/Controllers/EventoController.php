@@ -7,6 +7,7 @@ use App\Models\Evento;
 use App\Models\Registro;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Dompdf\Dompdf;
 
 class EventoController extends Controller
@@ -153,5 +154,14 @@ class EventoController extends Controller
             ]);
         }
         return back()->with('success', 'Organizador vinculado com sucesso!');
+    }
+
+    public function eventosProximos()
+    {
+        $eventosProximos = Evento::where('data_inicio', '>', Carbon::now())
+        ->orderBy('data_inicio', 'asc')
+        ->get();
+
+    return view('dashboard', compact('eventosProximos'));
     }
 }
