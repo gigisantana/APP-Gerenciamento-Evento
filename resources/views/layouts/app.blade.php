@@ -15,6 +15,8 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css'])
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
     </head>
     <body class="font-sans antialiased bg-lime-500">
         <div class="min-h-screen">
@@ -30,7 +32,7 @@
             @endif
 
             <!-- Page Content -->
-            <main class="mx-auto sm:px-6 lg:px-8  px-10 py-8">
+            <main class="mx-auto sm:px-6 lg:px-8 px-10 py-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg align-top justify-around flex flex-wrap divide-x-2 divide-dashed divide-lime-500">
                     @yield('content')
                 </div>

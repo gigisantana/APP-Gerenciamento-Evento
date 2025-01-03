@@ -21,13 +21,19 @@ class ProfileController extends Controller
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Atualiza o nome se o campo foi preenchido
+        if ($request->filled('nome')) {
+            $user->nome = $request->nome;
+        }
+    
+        // Atualiza a senha se o campo foi preenchido
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
         }
 
-        $request->user()->save();
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -53,7 +59,7 @@ class ProfileController extends Controller
     public function inscricoes()
     {
         $userId = auth()->id();
-        $incricoes = Registro::with('evento')
+        $inscricoes = Registro::with('evento')
             ->where('user_id', $userId)
             ->get()
             ->map(function ($inscricoes){
@@ -72,8 +78,8 @@ class ProfileController extends Controller
                 return $inscricoes;
             });
 
-        if (isset($incricoes)){
-            return view('profile.incricoes', compact('incricoes'));
+        if (isset($inscricoes)){
+            return view('profile.inscricoes', compact('inscricoes'));
         }
         return "<h1>ERRO: NENHUMA INSCRIÇÃO ENCONTRADA!</h1>";
     }

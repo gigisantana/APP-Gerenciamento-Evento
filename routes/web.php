@@ -21,9 +21,9 @@ Route::get('/home', function () {
 // Gerencia perfil
 Route::middleware('auth', 'verified')->group(function () {
     Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::get('/editar', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/editar', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/editar', [ProfileController::class, 'destroy'])->name('profile.destroy');
         Route::get('/inscricoes', [ProfileController::class, 'inscricoes'])->name('profile.inscricoes');
     });
     // Inscrição em atividade
