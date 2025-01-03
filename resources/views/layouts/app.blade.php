@@ -19,6 +19,7 @@
 
     </head>
     <body class="font-sans antialiased bg-lime-500">
+    <body class="font-sans antialiased bg-lime-500">
         <div class="min-h-screen">
             @include('layouts.navigation')
 
