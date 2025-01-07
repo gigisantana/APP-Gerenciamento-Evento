@@ -22,12 +22,20 @@
             </div>
 
             @if (Auth::check())
+                @if (Auth::user()->isServidorIfpr())
+                <div>
+                </div>
+                @endif
+                
                 <!-- Settings Dropdown for Authenticated Users -->
                 <div class="hidden sm:flex sm:items-center sm:ms-6">
+                    <a href="{{ route('evento.create') }}" class="inline-flex items-center px-4 py-2 border border-lime-700 text-sm leading-4 font-medium rounded-md text-lime-50 bg-lime-700 hover:bg-lime-100 hover:text-lime-700 focus:outline-none transition ease-in-out duration-150 me-4">
+                        {{ __('Criar Evento') }}
+                    </a>
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-lime-100 text-sm leading-4 font-medium rounded-md text-lime-700 bg-white hover:text-lime-700 focus:outline-none transition ease-in-out duration-150">
-                                <div>{{ Auth::user()->nome }}</div>
+                                <div>{{ Auth::user()->nome }} {{ Auth::user()->sobrenome ?? '' }}</div>
 
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

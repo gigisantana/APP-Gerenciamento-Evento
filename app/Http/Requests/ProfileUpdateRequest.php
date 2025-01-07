@@ -17,6 +17,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'nome' => ['required', 'string', 'max:255'],
+            'sobrenome' => ['required', 'string', 'max:255'],
             'password' => ['nullable', 'confirmed', 'min:8'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
         ];

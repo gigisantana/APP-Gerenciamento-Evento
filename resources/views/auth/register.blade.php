@@ -17,6 +17,13 @@
             <x-input-error :messages="$errors->get('nome')" class="mt-2" />
         </div>
 
+        <!-- Sobrenome -->
+        <div class="mt-4">
+            <x-input-label for="sobrenome" :value="__('Sobrenome')" />
+            <x-text-input id="sobrenome" class="block mt-1 w-full" type="text" name="sobrenome" :value="old('sobrenome')" required autofocus autocomplete="sobrenome" />
+            <x-input-error :messages="$errors->get('sobrenome')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />

@@ -19,6 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'nome',
+        'sobrenome',
         'email',
         'password',
         'role_id',
@@ -43,6 +44,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         //'password' => 'hashed',
     ];
+
+    // Método para verificar domínio do e-mail
+    public function isServidorIfpr()
+    {
+        return $this->email_verified_at !== null && str_ends_with($this->email, '@ifpr.edu.br');
+    }
 
     public function roles()
     {

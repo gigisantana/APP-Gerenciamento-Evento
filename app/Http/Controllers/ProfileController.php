@@ -23,12 +23,13 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // Atualiza o nome se o campo foi preenchido
+        // Atualiza o campo se foi preenchido
         if ($request->filled('nome')) {
             $user->nome = $request->nome;
         }
-    
-        // Atualiza a senha se o campo foi preenchido
+        if ($request->filled('sobrenome')) {
+            $user->password = bcrypt($request->sobrenome);
+        }
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }

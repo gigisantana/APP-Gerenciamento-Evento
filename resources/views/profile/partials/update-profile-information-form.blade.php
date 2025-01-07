@@ -4,7 +4,7 @@
             {{ __('Profile Information') }}
         </h2>
 
-        <p class="mt-1 text-sm text-lime-700">
+        <p class="mt-1 text-sm text-gray-600">
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
@@ -21,6 +21,12 @@
             <x-input-label for="nome" :value="__('Name')" />
             <x-text-input id="nome" name="nome" type="text" class="mt-1 block w-1/2" :value="old('nome', $user->nome)" required autofocus autocomplete="nome" />
             <x-input-error class="mt-2" :messages="$errors->get('nome')" />
+        </div>
+
+        <div>
+            <x-input-label for="sobrenome" :value="__('Name')" />
+            <x-text-input id="sobrenome" name="sobrenome" type="text" class="mt-1 block w-1/2" :value="old('sobrenome', $user->sobrenome)" required autofocus autocomplete="sobrenome" />
+            <x-input-error class="mt-2" :messages="$errors->get('sobrenome')" />
         </div>
 
         <div>

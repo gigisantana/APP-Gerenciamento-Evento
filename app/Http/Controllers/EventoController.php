@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Auth;
 
 class EventoController extends Controller
 {
@@ -20,22 +21,12 @@ class EventoController extends Controller
 
     public function create()
 {
-    // Verifica se o e-mail é de um servidor do IFPR
-    $userEmail = auth()->user()->email;
-
-    if (!$this->isServidorIfpr($userEmail)) {
-        abort(403, 'Somente servidores do IFPR podem criar eventos.');
+    if (Auth::user()->isServidorIfpr()) {
+        return view('evento.create');        
+    } else {
+        abort(403, 'Acesso restrito a servidores do IFPR.');
     }
-
-    return view('evento.create');
 }
-
-// Método para verificar domínio do e-mail
-    private function isServidorIfpr($email)
-    {
-        return str_ends_with($email, '@ifpr.edu.br');
-    }
-
 
     /**
      * Store a newly created resource in storage.
