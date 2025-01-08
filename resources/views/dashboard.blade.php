@@ -23,7 +23,7 @@
     </div>
     <div class="p-6 basis-3/5 px-8"> 
         <h1 class="text-2xl font-bold text-lime-700 ">Mapa do Campus Paranaguá</h1>
-        <img src="{{ asset('images/mapa-campus.svg') }}" alt="Mapa do Campus" class="mapa-campus w-4/5 justify-self-center">
+        <img src="{{ asset('images/mapa-IFPR.svg') }}" alt="Mapa do Campus" class="mapa-campus w-4/5 justify-self-center">
     </div>
 </div>
 @endsection
