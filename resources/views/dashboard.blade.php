@@ -1,8 +1,6 @@
 <!-- Página de dashboard de eventos, com mapa e uma lista simples de eventos próximos -->
-@extends('layouts.app')
+@extends('layouts.divider')
 @section('content')
-<div class="align-top flex flex-wrap divide-x-2 divide-dashed divide-lime-500">
-    <div class="p-6 basis-2/5">
         <h1 class="text-2xl font-bold text-lime-700 mb-4">Eventos do IFPR</h1>
         <!-- COLOCAR AQUI A LÓGICA PRA APARECER OS EVENTOS PRÓXIMOS!!! -->
         <p class="text-gray-500">Aqui você encontra os eventos próximos Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore dicta voluptate ducimus non necessitatibus, neque expedita fugiat quos. Quam fugiat quisquam eaque tempora vero repellat, officia ducimus minima at dolores? </p>
@@ -20,10 +18,4 @@
             </div>
             @endforeach
         </div>
-    </div>
-    <div class="p-6 basis-3/5 px-8"> 
-        <h1 class="text-2xl font-bold text-lime-700 ">Mapa do Campus Paranaguá</h1>
-        <img src="{{ asset('images/mapa-IFPR.svg') }}" alt="Mapa do Campus" class="mapa-campus w-4/5 justify-self-center">
-    </div>
-</div>
 @endsection
