@@ -71,12 +71,13 @@ class EventoController extends Controller
      */
     public function show($id)
     {
-        $evento = Evento::find($id);
-        //if(isset($evento)) {
-            return view('evento.show', compact(['evento']));
-        //}
-        //return "<h1>ERRO: EVENTO NÃO ENCONTRADO!</h1>";
-    }
+        $evento = Evento::findOrFail($id);
+        $userId = Auth::id();
+        $userRole = Registro::userRoleEvento($userId, $evento->id);
+
+
+        return view('evento.show', compact('evento', 'userRole'));
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -169,8 +170,5 @@ class EventoController extends Controller
     return view('dashboard', compact('eventosProximos'));
     }
 
-    public function status()
-    {
 
-    }
 }

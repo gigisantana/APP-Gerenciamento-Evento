@@ -39,4 +39,15 @@ class Registro extends Model
     {
         return $this->belongsTo(Atividade::class, 'atividade_id');
     }
+
+    public static function userRoleEvento($userId, $eventoId)
+    {
+        $registro = self::where('user_id', $userId)
+        ->where('evento_id', $eventoId)
+        ->first();
+
+        return $registro ? $registro->role_id : null;
+    }
+
+    
 }

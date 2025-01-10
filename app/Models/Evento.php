@@ -57,4 +57,13 @@ class Evento extends Model
             return 'Futuro';
         }
     }
+
+    public function getUserRole(User $user)
+    {
+        $registro = $this->registros()
+        ->where('user_id', $user->id)
+        ->first();
+
+        return $registro ? $registro->role_id : null;
+    }
 }

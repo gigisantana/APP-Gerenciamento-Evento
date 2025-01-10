@@ -2,16 +2,27 @@
 @section('content')
     <div class="container mx-auto px-4 py-8">
         <!-- Cabeçalho do Evento -->
+        @if($userRole === 1) {{-- Coordenador --}}
+            <div>
+                botão de editar e excluir evento
+            </div>
+        @endif
+
         <div class="bg-lime-200 text-lime-700 text-center p-6 rounded-md shadow-md mb-6">
             <h1 class="text-3xl font-bold">{{ $evento->nome }}</h1>
             <p class="mt-2 text-lg">{{ $evento->descricao }}</p>
             <p class="mt-4">
-                <strong>Data:</strong> {{ $evento->data_inicio->format('d/m/Y') }} - {{ $evento->data_fim->format('d/m/Y') }}
+                <strong>Data:</strong> {{ $evento->data_inicio }} - {{ $evento->data_fim }}
             </p>
         </div>
 
         <!-- Atividades do Evento -->
         <div>
+            @if($userRole === 1 || $userRole === 2)
+                <div>
+                    botão pra criar atividade
+                </div>
+            @endif
             <h2 class="text-2xl font-semibold text-lime-700 mb-4">Atividades</h2>
             @if($evento->atividades->count())
                 <div class="flex flex-col gap-6">

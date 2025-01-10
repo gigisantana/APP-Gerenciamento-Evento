@@ -28,4 +28,5 @@ class RegistroController extends Controller
         ]);
         return redirect()->back()->with('message', 'Inscrição realizada com sucesso!');
     }
+
 }

@@ -65,7 +65,7 @@ Route::middleware('auth', 'verified')->group(function(){
         Route::put('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'update'])->name('atividade.update');
         Route::delete('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
         Route::get('/{id}/atividades/create', [AtividadeController::class, 'create'])->name('atividade.create');
-        Route::post('/{id}/atividades', [AtividadeController::class, 'store'])->name('atividade.store');
+        Route::post('/{id}', [AtividadeController::class, 'store'])->name('atividade.store');
         Route::get('/{id}/atividades/{atividade_id}/edit', [AtividadeController::class, 'edit'])->name('atividade.edit');
         Route::put('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'update'])->name('atividade.update');
         Route::delete('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
