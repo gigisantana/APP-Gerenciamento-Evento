@@ -24,7 +24,7 @@
         </div>
 
         <div>
-            <x-input-label for="sobrenome" :value="__('Name')" />
+            <x-input-label for="sobrenome" :value="__('Sobrenome')" />
             <x-text-input id="sobrenome" name="sobrenome" type="text" class="mt-1 block w-1/2" :value="old('sobrenome', $user->sobrenome)" required autofocus autocomplete="sobrenome" />
             <x-input-error class="mt-2" :messages="$errors->get('sobrenome')" />
         </div>

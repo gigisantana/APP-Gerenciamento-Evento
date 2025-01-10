@@ -20,37 +20,50 @@ class EventoController extends Controller
     }
 
     public function create()
-{
-    if (Auth::user()->isServidorIfpr()) {
-        return view('evento.create');        
-    } else {
-        abort(403, 'Acesso restrito a servidores do IFPR.');
+    { 
+        if (Auth::user()->isServidorIfpr()) {
+            return view('evento.create');        
+        } else {
+            abort(403, 'Acesso restrito a servidores do IFPR.');
+        }
     }
-}
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Evento::class);
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'descricao' => 'required|string',
+            'data_inicio' => 'required|date',
+            'data_fim' => 'required|date|after_or_equal:data_inicio',
+            'documento' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+        ]);
 
+        $evento = Evento::create([
+            'nome' => $request->nome,
+            'descricao' => $request->descricao,
+            'data_inicio' => $request->data_inicio,
+            'data_fim' => $request->data_fim,
+        ]);
+        
         if($request->hasFile('documento')){
-            $evento = new Evento();
-            $evento->nome = $request->nome;
-            $evento->descricao = $request->descricao;
-            $evento->data_inicio = $request->data_inicio;
-            $evento->data_fim = $request->data_fim;
-            $evento->save();
-
             $ext = $request->file('documento')->getClientOriginalExtension();
-            $nome_arq = $evento->id . "_" . time() . "." . $ext; 
+            $nome_arq = $evento->id . "_" . now()->timestamp . "." . $ext; 
             $request->file('documento')->storeAs("public/", $nome_arq);
             $evento->url = $nome_arq;
             $evento->save();
-
-            return redirect()->route('evento.index');
         }
+
+            Registro::create([
+                'user_id' => auth()->id(),
+                'evento_id' => $evento->id,
+                'role_id' => 1, // id da role "coordenador"
+                'atividade_id' => null,
+            ]);
+
+            return redirect()->route('evento.show', $evento->id)->with('success', 'Evento criado com sucesso!');
     }
 
     /**
@@ -149,10 +162,15 @@ class EventoController extends Controller
 
     public function eventosProximos()
     {
-        $eventosProximos = Evento::where('data_inicio', '>', Carbon::now())
+        $eventosProximos = Evento::where('data_inicio', '>=', Carbon::today())
         ->orderBy('data_inicio', 'asc')
         ->get();
 
     return view('dashboard', compact('eventosProximos'));
+    }
+
+    public function status()
+    {
+
     }
 }

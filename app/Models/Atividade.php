@@ -20,6 +20,8 @@ class Atividade extends Model
 
     protected $casts = [
         'data' => 'date',
+        'hora_inicio' => 'datetime:H:i:s',
+        'hora_fim' => 'datetime:H:i:s',
     ];
 
     public function evento()

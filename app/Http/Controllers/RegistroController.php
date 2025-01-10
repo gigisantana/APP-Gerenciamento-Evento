@@ -24,9 +24,8 @@ class RegistroController extends Controller
             'user_id' => $user->id,
             'evento_id' => $request->evento_id,
             'atividade_id' => $request->atividade_id,
-            'role_id' => $request->role_id, // Inscrito
+            'role_id' => 3, // Inscrito
         ]);
-
         return redirect()->back()->with('message', 'Inscrição realizada com sucesso!');
     }
 }

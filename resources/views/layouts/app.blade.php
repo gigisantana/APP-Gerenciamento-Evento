@@ -20,8 +20,7 @@
     </head>
     <body class="font-sans antialiased bg-lime-500">
         <div class="min-h-screen">
-            @include('layouts.navigation')
-
+            @include('layouts.navigation')            
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="">
@@ -30,19 +29,12 @@
                     </div>
                 </header>
             @endif
-
+            
             <!-- Page Content -->
             <main class="mx-auto my-auto sm:px-6 lg:px-8 px-10 py-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     @yield('content')
-                </div>
-                
-                @if (session('message'))
-                <div class="bg-green-100 text-green-700 p-4 rounded-md shadow-md mb-6">
-                    {{ session('message') }}
-                </div>
-                @endif
-                    
+                </div>   
             </main>
         </div>
     </body>

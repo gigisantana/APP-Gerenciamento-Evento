@@ -44,13 +44,13 @@
                         </div>
                     </div>
                 </div>
-                
+                <!--
                 @if (session('message'))
                 <div class="bg-green-100 text-green-700 p-4 rounded-md shadow-md mb-6">
                     {{ session('message') }}
                 </div>
                 @endif
-                    
+            -->
             </main>
         </div>
     </body>

@@ -60,6 +60,14 @@
                     </div>
                     @endforeach
                 </div>
+                <!-- modal de confirmação de inscrição -->
+                {{-- <div class="fixed top-0 w-full z-50">
+                    @if (session('message'))
+                    <div class="bg-green-100 text-green-700 p-4 rounded-md shadow-md mb-6">
+                        {{ session('message') }}
+                    </div>
+                    @endif
+                </div> --}}
             @else
                 <p class="text-gray-500">Nenhuma atividade cadastrada para este evento.</p>
             @endif

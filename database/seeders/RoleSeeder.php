@@ -14,9 +14,9 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         $roles = [
-            ['nome' => 'coordenador', 'descricao' => 'Coordena eventos e gerencia organizadores.'],
-            ['nome' => 'organizador', 'descricao' => 'Gerencia atividades no evento.'],
-            ['nome' => 'inscrito', 'descricao' => 'Participa e visualiza eventos/atividades.']
+            ['nome' => 'coordenador', 'descricao' => 'Coordena eventos e gerencia organizadores.'], // id 1
+            ['nome' => 'organizador', 'descricao' => 'Gerencia atividades no evento.'], // id 2
+            ['nome' => 'inscrito', 'descricao' => 'Participa e visualiza eventos/atividades.'] // id 3
         ];
 
         foreach ($roles as $role) {

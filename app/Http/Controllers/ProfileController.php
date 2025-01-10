@@ -60,28 +60,26 @@ class ProfileController extends Controller
     public function inscricoes()
     {
         $userId = auth()->id();
-        $inscricoes = Registro::with('evento')
+        $inscricoes = Registro::with('evento', 'atividade')
             ->where('user_id', $userId)
             ->get()
-            ->map(function ($inscricoes){
-                $evento = $inscricoes->evento;
+            ->map(function ($inscricao){
+                $evento = $inscricao->evento;
 
-                $today = now();
-                $dataEvento = $evento->data;
+                if ($evento) {
+                    $today = now();
+                    $dataEvento = $evento->data;
 
-                if ($dataEvento < $today) {
-                    $evento->status = 'Encerrado';
-                } elseif ($dataEvento->diffInDays($today) <= 3) {
-                    $evento->status = 'Próximo';
-                } else {
-                    $evento->status = 'Futuro!';
+                    if ($dataEvento < $today) {
+                        $evento->status = 'Encerrado';
+                    } elseif ($dataEvento->diffInDays($today) <= 3) {
+                        $evento->status = 'Próximo';
+                    } else {
+                        $evento->status = 'Futuro!';
+                    }
                 }
-                return $inscricoes;
+                return $inscricao;
             });
-
-        if (isset($inscricoes)){
-            return view('profile.inscricoes', compact('inscricoes'));
-        }
-        return "<h1>ERRO: NENHUMA INSCRIÇÃO ENCONTRADA!</h1>";
+            return view('profile.inscricoes', compact('inscricoes'));       
     }
 }

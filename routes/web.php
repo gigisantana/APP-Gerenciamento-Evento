@@ -23,7 +23,7 @@ Route::middleware('auth', 'verified')->group(function(){
     Route::middleware(['verify.ifpr.email'])->group(function () {
         Route::prefix('eventos')->group(function () {
             Route::get('/criar', [EventoController::class, 'create'])->name('evento.create');
-            Route::post('/store', [EventoController::class, 'store'])->name('evento.store');
+            Route::post('/', [EventoController::class, 'store'])->name('evento.store');
             Route::get('/{evento}/edit', [EventoController::class, 'edit'])->name('evento.edit');
             Route::put('/{evento}', [EventoController::class, 'update'])->name('evento.update');
             Route::delete('/{evento}', [EventoController::class, 'destroy'])->name('evento.destroy');

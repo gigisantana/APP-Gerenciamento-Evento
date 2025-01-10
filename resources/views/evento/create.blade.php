@@ -1,6 +1,15 @@
 @extends('layouts.app')
 @section('content')
 <div class="m-6 flex-wrap">
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <form action="{{route('evento.store')}}" method="POST">
         @csrf
         <div class="m-6">
@@ -13,14 +22,14 @@
             </div>
             <div class="flex space-x-8"> 
                 <div class="m-4">
-                    <x-input-label for="data-inicio" :value="__('Data de início:')" />
-                    <x-date-input id="data-inicio" type="date" name="data-inicio" />
-                    <x-input-error :messages="$errors->get('data-inicio')" class="mt-2" />
+                    <x-input-label for="data_inicio" :value="__('Data de início:')" />
+                    <x-date-input id="data_inicio" type="date" name="data_inicio" />
+                    <x-input-error :messages="$errors->get('data_inicio')" class="mt-2" />
                 </div>
                 <div class="m-4">
-                    <x-input-label for="data-final" :value="__('Data de término:')" />
-                    <x-date-input id="data-final" type="date" name="data-final" />
-                    <x-input-error :messages="$errors->get('data-final')" class="mt-2" />
+                    <x-input-label for="data_fim" :value="__('Data de término:')" />
+                    <x-date-input id="data_fim" type="date" name="data_fim" />
+                    <x-input-error :messages="$errors->get('data_fim')" class="mt-2" />
                 </div>
             </div>
             <div class="m-4 w-1/2 ">
@@ -30,7 +39,7 @@
             </div>
             <div class="flex justify-center items-center">
                 <x-primary-button class="mt-4 ml-6 justify-center">
-                    {{ __('Criar') }}
+                    {{ __('Criar Evento') }}
                 </x-primary-button>
             </div>
         </div>

@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('atividades', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('descricao')->nullable();
-            $table->string('data');
-            $table->string('hora_inicio');
-            $table->string('hora_fim');
+            $table->text('descricao')->nullable();
+            $table->date('data');
+            $table->time('hora_inicio');
+            $table->time('hora_fim');
             $table->unsignedBigInteger('evento_id');
             $table->timestamps();
 

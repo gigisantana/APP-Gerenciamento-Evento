@@ -42,4 +42,19 @@ class Evento extends Model
     {
         return $this->hasMany(Permission::class);
     }
+
+    public function status()
+    {
+        $today = now();
+        $dataInicio = $this->data_inicio;
+        $dataFim = $this->data_fim;
+
+        if ($dataFim < $today) {
+            return 'Encerrado';
+        } elseif ($dataInicio <= $today && $dataFim >= $today) {
+            return 'Próximo';
+        } else {
+            return 'Futuro';
+        }
+    }
 }

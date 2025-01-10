@@ -12,7 +12,7 @@
                     <div class="p-4">
                         <h2 class="text-lg font-semibold text-green-700">{{ $evento->nome }}</h2>
                         <p class="text-sm text-gray-600 mt-2">{{ $evento->descricao }}</p>
-                        <p class="text-sm text-gray-500 mt-2">Data: {{ $evento->data_inicio->format('d/m/Y') }}</p>
+                        <p class="text-sm text-gray-500 mt-2">Data: {{ $evento->data_inicio->format('d/m/Y') }} - {{ $evento->data_fim->format('d/m/Y') }}</p>
                     </div>
                 </div>
             </div>
