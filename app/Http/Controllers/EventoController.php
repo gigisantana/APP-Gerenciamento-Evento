@@ -75,9 +75,8 @@ class EventoController extends Controller
         $userId = Auth::id();
         $userRole = Registro::userRoleEvento($userId, $evento->id);
 
-
         return view('evento.show', compact('evento', 'userRole'));
-}
+    }
 
     /**
      * Show the form for editing the specified resource.

@@ -8,7 +8,7 @@
             </div>
         @endif
 
-        <div class="bg-lime-200 text-lime-700 text-center p-6 rounded-md shadow-md mb-6">
+        <div class="bg-lime-100 text-lime-700 text-center p-6 rounded-md shadow-md mb-6">
             <h1 class="text-3xl font-bold">{{ $evento->nome }}</h1>
             <p class="mt-2 text-lg">{{ $evento->descricao }}</p>
             <p class="mt-4">
@@ -18,10 +18,13 @@
 
         <!-- Atividades do Evento -->
         <div>
+            <a href="{{ route('atividade.create', ['id' => $evento->id]) }}" class=" justify-center bg-lime-500 text-white text-center px-4 py-2 mt-4 rounded-md hover:bg-lime-600">
+                Criar Atividade
+            </a>
+        </div>
+        @if($evento->atividade)
+        <div>
             @if($userRole === 1 || $userRole === 2)
-                <div>
-                    botão pra criar atividade
-                </div>
             @endif
             <h2 class="text-2xl font-semibold text-lime-700 mb-4">Atividades</h2>
             @if($evento->atividades->count())
@@ -83,5 +86,6 @@
                 <p class="text-gray-500">Nenhuma atividade cadastrada para este evento.</p>
             @endif
         </div>
+        @endif
     </div>
 @endsection

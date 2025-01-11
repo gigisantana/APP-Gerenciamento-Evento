@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Atividade;
 use App\Models\Evento;
+use App\Models\Registro;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Auth;
 
 class AtividadeController extends Controller
 {
@@ -16,55 +18,41 @@ class AtividadeController extends Controller
         return view('atividade.index', compact('evento', 'atividade'));
     }
 
-    public function create(Request $request, Evento $evento)
+    public function create(Request $request, $id)
     {
-        $this->authorize('manageActivities', $evento);
+        $evento = Evento::findOrFail($id);
+        return view('atividade.create', compact('evento'));
+    }
+
+
+    public function store(Request $request, $id)
+    {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'descricao' => 'nullable|string',
+            'descricao' => 'required|string',
             'data' => 'required|date',
             'hora_inicio' => 'required|date_format:H:i',
             'hora_fim' => 'required|date_format:H:i|after:hora_inicio',
         ]);
-
-        $atividade = new Atividade([
+    
+        $atividade = Atividade::create([
             'nome' => $request->nome,
             'descricao' => $request->descricao,
             'data' => $request->data,
             'hora_inicio' => $request->hora_inicio,
             'hora_fim' => $request->hora_fim,
-            'evento_id' => $evento->id,
+            'evento_id' => $id,
         ]);
-        $atividade->save();
-
-        return response()->json([
-            'message' => 'Atividade criada com sucesso!',
-            'atividade' => $atividade,
+    
+        Registro::create([
+            'user_id' => auth()->id(),
+            'evento_id' => $id,
+            'role_id' => 2, // id da role "organizador"
+            'atividade_id' => $atividade->id,
         ]);
-    }
 
-
-    public function store(Request $request)
-    {
-        $this->authorize('create', Atividade::class);
-
-        if($request->hasFile('documento')){
-            $atividade = new Atividade();
-            $atividade->nome = $request->nome;
-            $atividade->descricao = $request->descricao;
-            $atividade->hora_inicio = $request->hora_inicio;
-            $atividade->hora_fim = $request->hora_fim;
-            $atividade->evento_id = $request->evento_id;
-            $atividade->save();
-
-            $ext = $request->file('documento')->getClientOriginalExtension();
-            $nome_arq = $atividade->id . "_" . time() . "." . $ext; 
-            $request->file('documento')->storeAs("public/", $nome_arq);
-            $atividade->url = $nome_arq;
-            $atividade->save();
-
-            return redirect()->route('atividade.index');
-        }
+        return redirect()->route('evento.show', $id)
+            ->with('success', 'Atividade criada com sucesso!');
     }
 
     /**
@@ -73,11 +61,11 @@ class AtividadeController extends Controller
     public function show($eventoId, $id)
     {
         $evento = Evento::findOrFail($eventoId);
-        $atividade = $evento->atividade()->findOrFail($id);
-        if(isset($atividade)) {
-            return view('atividade.show', compact('evento', 'atividade'));
-        }
-        return "<h1>ERRO: ATIVIDADE NÃO ENCONTRADO!</h1>";
+        $atividade = $evento->atividades()->findOrFail($id);
+        $userId = Auth::id();
+        $userRole = Registro::userRoleEvento($userId, $evento->id);
+            
+        return view('atividade.show', compact('evento', 'atividade', 'userRole'));
     }
 
     /**

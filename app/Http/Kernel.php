@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'registered' => \App\Http\Middleware\EnsureUserIsRegistered::class,
         'verify.ifpr.email' => \App\Http\Middleware\VerifyIfprEmail::class,
+        'verify.role.evento' => \App\Http\Middleware\VerifyRoleEvento::class,
     ];
 }
