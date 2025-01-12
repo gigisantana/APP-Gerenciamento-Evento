@@ -81,15 +81,10 @@ class EventoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $this->authorize('edit', Evento::class);
-
         $evento = Evento::find($id);
-        if(isset($evento)) {
-            return view('evento.edit', compact(['evento']));
-        }
-        return "<h1>ERRO: EVENTO NÃO ENCONTRADO!</h1>";
+        return view('evento.edit', compact(['evento']));
     }
 
     /**

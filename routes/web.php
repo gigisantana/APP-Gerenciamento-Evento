@@ -24,10 +24,10 @@ Route::middleware('auth', 'verified')->group(function(){
         Route::prefix('eventos')->group(function () {
             Route::get('/criar', [EventoController::class, 'create'])->name('evento.create');
             Route::post('/', [EventoController::class, 'store'])->name('evento.store');
-            Route::get('/{evento}/edit', [EventoController::class, 'edit'])->name('evento.edit');
-            Route::put('/{evento}', [EventoController::class, 'update'])->name('evento.update');
-            Route::delete('/{evento}', [EventoController::class, 'destroy'])->name('evento.destroy');
-            Route::post('/{evento}/organizadores', [EventoController::class, 'addOrganizador']);
+            Route::get('/{id}/edit', [EventoController::class, 'edit'])->name('evento.edit');
+            Route::put('/{id}', [EventoController::class, 'update'])->name('evento.update');
+            Route::delete('/{id}', [EventoController::class, 'destroy'])->name('evento.destroy');
+            Route::post('/{id}/organizadores', [EventoController::class, 'addOrganizador']);
         });
     });
 });
