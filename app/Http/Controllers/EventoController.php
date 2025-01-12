@@ -21,7 +21,7 @@ class EventoController extends Controller
 
     public function create()
     { 
-        if (Auth::user()->isServidorIfpr()) {
+        if (Auth::user()->is_servidor_ifpr) {
             return view('evento.create');        
         } else {
             abort(403, 'Acesso restrito a servidores do IFPR.');

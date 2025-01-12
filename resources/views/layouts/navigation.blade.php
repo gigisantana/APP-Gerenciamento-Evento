@@ -25,7 +25,7 @@
             
             <!-- Settings Dropdown for Authenticated Users -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                @if (Auth::user()->isServidorIfpr())
+                @if (Auth::user()->is_servidor_ifpr)
                 <div>
                     <a href="{{ route('evento.create') }}" class="inline-flex items-center px-4 py-2 border border-lime-600 text-sm leading-4 font-medium rounded-md text-lime-50 bg-lime-600 hover:bg-lime-100 hover:text-lime-700 focus:outline-none transition ease-in-out duration-150 me-4">
                         {{ __('+ Criar Evento') }}
@@ -51,6 +51,9 @@
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('profile.inscricoes')">
                                 {{ __('Inscrições') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('profile.gerenciamento')">
+                                {{ __('Gerenciar Eventos') }}
                             </x-dropdown-link>
 
                             <!-- Authentication -->

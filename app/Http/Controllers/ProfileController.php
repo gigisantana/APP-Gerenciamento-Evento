@@ -60,8 +60,11 @@ class ProfileController extends Controller
     public function inscricoes()
     {
         $user = auth()->id();
+        $roleInscrito = 3;
+
         $inscricoes = Registro::with('evento', 'atividade')
             ->where('user_id', $user)
+            ->where('role_id', $roleInscrito)
             ->get()
             ->map(function ($inscricao){
                 $evento = $inscricao->evento;
@@ -74,5 +77,51 @@ class ProfileController extends Controller
                 return $inscricao;
             });
             return view('profile.inscricoes', compact('inscricoes'));       
+    }
+    
+    public function gerenciar()
+    {
+        $user = auth()->id();
+        $roles = [
+            'organizador' => 2,
+            'coordenador' => 1,
+        ];
+
+        // lista os ID dos eventos em que o usuário é coordenador, pra evitar duplicação no painel de gerenciamento
+        $coordenadorEventosId = Registro::where('user_id', $user)
+        ->where('role_id', $roles['coordenador'])
+        ->pluck('evento_id');
+    
+        $vinculosOrganizador = Registro::with('evento', 'atividade')
+            ->where('user_id', $user)
+            ->where('role_id', $roles['organizador'])
+            ->whereNotIn('evento_id', $coordenadorEventosId) // vai excluir os eventos que já estão na lista
+            ->get()
+            ->map(function ($vinculosOrganizador){
+                $evento = $vinculosOrganizador->evento;
+    
+                    if ($evento) {
+                        $statusData = $evento->status();
+                        $evento->status = $statusData['status'];
+                        $evento->diasRestantes = $statusData['diasRestantes'];
+                    }
+                    return $vinculosOrganizador;
+                });
+    
+        $vinculosCoordenador = Registro::with('evento', 'atividade')
+            ->where('user_id', $user)
+            ->where('role_id', $roles['coordenador'])
+            ->get()
+            ->map(function ($vinculosCoordenador){
+                $evento = $vinculosCoordenador->evento;
+    
+                    if ($evento) {
+                        $statusData = $evento->status();
+                        $evento->status = $statusData['status'];
+                        $evento->diasRestantes = $statusData['diasRestantes'];
+                    }
+                    return $vinculosCoordenador;
+                });
+            return view('profile.gerenciamento', compact('vinculosOrganizador', 'vinculosCoordenador'));       
     }
 }

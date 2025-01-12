@@ -46,7 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     // Método para verificar domínio do e-mail
-    public function isServidorIfpr()
+    public function getIsServidorIfprAttribute()
     {
         return $this->email_verified_at !== null && str_ends_with($this->email, '@ifpr.edu.br');
     }

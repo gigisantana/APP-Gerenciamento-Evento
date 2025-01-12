@@ -21,7 +21,7 @@
                             @endif">
 
                             @if ($inscricao->evento->status === 'Próximo')
-                                Faltam {{ $inscricao->evento->diasRestantes }} dias para o evento!
+                                Faltam {{ $inscricao->evento->diasRestantes }} dias!
                             @else
                                 {{ $inscricao->evento->status()['status'] }}
                             @endif

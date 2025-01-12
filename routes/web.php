@@ -52,6 +52,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::patch('/editar', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/editar', [ProfileController::class, 'destroy'])->name('profile.destroy');
         Route::get('/inscricoes', [ProfileController::class, 'inscricoes'])->name('profile.inscricoes');
+        Route::get('/gerenciar', [ProfileController::class, 'gerenciar'])->name('profile.gerenciamento');
     });
     // Inscrição em atividade
     Route::post('/eventos/{id}/atividades/{atividade_id}/inscricao', [RegistroController::class, 'inscrever'])->name('registro.inscrever');
