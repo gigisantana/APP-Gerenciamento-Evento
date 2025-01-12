@@ -71,15 +71,10 @@ class AtividadeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $this->authorize('edit', Atividade::class);
-
         $atividade = Atividade::find($id);
-        if(isset($atividade)) {
-            return view('atividade.edit', compact(['atividade']));
-        }
-        return "<h1>ERRO: ATIVIDADE NÃO ENCONTRADO!</h1>";
+        return view('atividade.edit', compact(['atividade']));
     }
 
     /**
@@ -87,16 +82,12 @@ class AtividadeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $this->authorize('edit', Atividade::class);
-
         $atividade = Atividade::find($id);
-        if(isset($atividade)) {
-            $atividade->nome = $request->nome;
-            $atividade->descricao = $request->descricao;
-            $atividade->save();
-            return redirect()->route('atividade.index');
-        }
-        return "<h1>ERRO: ATIVIDADE NÃO ENCONTRADO!</h1>";
+            
+        $atividade->nome = $request->nome;
+        $atividade->descricao = $request->descricao;
+        $atividade->save();
+        return redirect()->route('atividade.index');
     }
 
     /**
@@ -104,15 +95,8 @@ class AtividadeController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->authorize('destroy', Atividade::class);
-
         $atividade = Atividade::find($id);
-        if(isset($atividade)) {
-            $atividade->delete();
-            return redirect()->route('atividade.index');
-        }
-        
-        return "<h1>ERRO: ATIVIDADE NÃO ENCONTRADO!</h1>";
+        return redirect()->route('atividade.index');
     }
 
     public function report() 

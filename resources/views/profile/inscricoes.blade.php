@@ -14,12 +14,17 @@
                 <li class="p-4 border rounded-lg">                    
                     <div class="flex gap-5">
                         <h2 class=" text-xl font-bold text-lime-700">{{ $inscricao->evento->nome }}</h2>
-                        <span class="px-3 py-1 rounded-full text-white
-                            @if ($inscricao->evento->status() === 'Encerrado') bg-gray-500
-                            @elseif ($inscricao->evento->status() === 'Próximo') bg-yellow-500
-                            @else bg-lime-500
+                        <span class="px-3 py-1 rounded-full text-white 
+                            @if ($inscricao->evento->status === 'Encerrado') bg-gray-400 
+                            @elseif ($inscricao->evento->status === 'Próximo') bg-amber-400 
+                            @else bg-lime-500 
                             @endif">
-                            {{ $inscricao->evento->status() }}
+
+                            @if ($inscricao->evento->status === 'Próximo')
+                                Faltam {{ $inscricao->evento->diasRestantes }} dias para o evento!
+                            @else
+                                {{ $inscricao->evento->status()['status'] }}
+                            @endif
                         </span>
                     </div>
                     <p>{{ $inscricao->evento->descricao }}</p>

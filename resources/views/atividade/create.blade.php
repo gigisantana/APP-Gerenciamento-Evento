@@ -17,7 +17,7 @@
         
             <h1 class="text-2xl font-bold text-lime-700 mb-4 ">Criar Nova Atividade</h1>
 
-            <input type="hidden" name="evento_id" value="{{ id }}">
+            <input type="hidden" name="evento_id" value="{{ $evento->id }}">
             <div class="m-4">
                 <x-input-label for="nome" :value="__('Nome da atividade:')" />
                 <x-text-input id="nome" type="text" name="nome" />
@@ -58,9 +58,9 @@
             <h1 class="text-3xl font-bold">{{ $evento->nome }}</h1>
             <p class="mt-2 text-lg">{{ $evento->descricao }}</p>
             <p class="mt-4">
-                <strong>Início:</strong> {{ $evento->data_inicio }}
+                <strong>Início:</strong> {{ $evento->data_inicio->format('d/m/Y') }}
                 <br>  
-                <strong>Fim:</strong> {{ $evento->data_fim }}                  
+                <strong>Fim:</strong> {{ $evento->data_fim->format('d/m/Y') }}                  
             </p>
         </div>
     </div>

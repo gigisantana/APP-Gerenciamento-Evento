@@ -59,24 +59,17 @@ class ProfileController extends Controller
 
     public function inscricoes()
     {
-        $userId = auth()->id();
+        $user = auth()->id();
         $inscricoes = Registro::with('evento', 'atividade')
-            ->where('user_id', $userId)
+            ->where('user_id', $user)
             ->get()
             ->map(function ($inscricao){
                 $evento = $inscricao->evento;
 
                 if ($evento) {
-                    $today = now();
-                    $dataEvento = $evento->data;
-
-                    if ($dataEvento < $today) {
-                        $evento->status = 'Encerrado';
-                    } elseif ($dataEvento->diffInDays($today) <= 3) {
-                        $evento->status = 'Próximo';
-                    } else {
-                        $evento->status = 'Futuro!';
-                    }
+                    $statusData = $evento->status();
+                    $evento->status = $statusData['status'];
+                    $evento->diasRestantes = $statusData['diasRestantes'];
                 }
                 return $inscricao;
             });

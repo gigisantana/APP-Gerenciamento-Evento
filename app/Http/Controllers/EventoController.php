@@ -36,8 +36,8 @@ class EventoController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'descricao' => 'required|string',
-            'data_inicio' => 'required|date',
-            'data_fim' => 'required|date|after_or_equal:data_inicio',
+            'data_inicio' => 'nullable|date',
+            'data_fim' => 'nullable|date|after_or_equal:data_inicio',
             'documento' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
         ]);
 
@@ -92,16 +92,12 @@ class EventoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $this->authorize('edit', Evento::class);
-
         $evento = Evento::find($id);
-        if(isset($evento)) {
+
             $evento->nome = $request->nome;
             $evento->descricao = $request->descricao;
             $evento->save();
             return redirect()->route('evento.index');
-        }
-        return "<h1>ERRO: EVENTO NÃO ENCONTRADO!</h1>";
     }
 
     /**
@@ -109,15 +105,10 @@ class EventoController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->authorize('destroy', Evento::class);
-
         $evento = Evento::find($id);
-        if(isset($evento)) {
+
             $evento->delete();
             return redirect()->route('evento.index');
-        }
-        
-        return "<h1>ERRO: EVENTO NÃO ENCONTRADO!</h1>";
     }
 
     public function report() 
@@ -131,28 +122,34 @@ class EventoController extends Controller
             array("Attachment" => false));
     }
 
-    public function addOrganizador(Request $request, Evento $evento)
+    public function addOrganizador(Request $request, $id)
     {
-        // Autoriza apenas coordenadores a vincular organizadores
-        $this->authorize('addOrganizador', $evento);
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
 
-        // Verifica se o usuário com o e-mail informado existe
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
             return back()->withErrors(['email' => 'Usuário com este e-mail não encontrado.']);
         }
+        
+        $registro = Registro::where('user_id', $user->id)
+        ->where('evento_id', $id)
+        ->first();
 
-        // Vincula o usuário a role de organizador
-        $role = Role::where('nome', 'organizador')->first();
-        if ($role) {
-            Registro::updateOrCreate([
+        if ($registro) {
+            // Atualiza a role do registro existente
+            $registro->update(['role_id' => 2]); // 2 = Organizador
+        } else {
+            Registro::create([
                 'user_id' => $user->id,
-                'evento_id' => $evento->id,
-                'role_id' => $role->id,
+                'evento_id' => $id,
+                'role_id' => 2, // 2 = Organizador
+                'atividade_id' => null,
             ]);
         }
-        return back()->with('success', 'Organizador vinculado com sucesso!');
+        return back()->route('evento.show', $id)->with('success', 'Organizador vinculado com sucesso!');
     }
 
     public function eventosProximos()
@@ -163,6 +160,4 @@ class EventoController extends Controller
 
     return view('dashboard', compact('eventosProximos'));
     }
-
-
 }

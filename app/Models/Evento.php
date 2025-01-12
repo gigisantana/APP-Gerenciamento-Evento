@@ -17,8 +17,8 @@ class Evento extends Model
     ];
 
     protected $casts = [
-        'data_inicio' => 'datetime',
-        'data_fim' => 'datetime',
+        'data_inicio' => 'date',
+        'data_fim' => 'date',
         ];
 
     public function atividades()
@@ -45,16 +45,33 @@ class Evento extends Model
 
     public function status()
     {
-        $today = now();
-        $dataInicio = $this->data_inicio;
+        $today = today();
+        $dataEvento = $this->data_inicio;
         $dataFim = $this->data_fim;
 
-        if ($dataFim < $today) {
-            return 'Encerrado';
-        } elseif ($dataInicio <= $today && $dataFim >= $today) {
-            return 'Próximo';
+        if (!$dataEvento) {
+            return [
+                'status' => 'Futuro',
+                'diasRestantes' => null
+            ];
+        } elseif ($dataEvento < $today) {
+            return [
+                'status' => 'Encerrado',
+                'diasRestantes' => 0
+            ];
         } else {
-            return 'Futuro';
+            $diasRestantes = $today->diffInDays($dataEvento, false);
+            if ($diasRestantes <= 30) {
+                return [
+                    'status' => 'Próximo',
+                    'diasRestantes' => $diasRestantes
+                ];
+            } else {
+                return [
+                    'status' => 'Futuro',
+                    'diasRestantes' => $diasRestantes
+                ];
+            }
         }
     }
 
