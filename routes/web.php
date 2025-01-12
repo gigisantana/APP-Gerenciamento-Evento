@@ -27,7 +27,7 @@ Route::middleware('auth', 'verified')->group(function(){
             Route::get('/{id}/edit', [EventoController::class, 'edit'])->name('evento.edit');
             Route::put('/{id}', [EventoController::class, 'update'])->name('evento.update');
             Route::delete('/{id}', [EventoController::class, 'destroy'])->name('evento.destroy');
-            Route::post('/{id}/organizadores', [EventoController::class, 'addOrganizador']);
+            Route::post('/{id}/organizadores', [RegistroController::class, 'addOrganizador'])->name('registro.vincular');
         });
     });
 });
@@ -38,9 +38,9 @@ Route::middleware('auth', 'verified')->group(function(){
         Route::middleware(['verify.role.evento'])->group(function () {
             Route::get('/{id}/create', [AtividadeController::class, 'create'])->name('atividade.create');
             Route::post('/{id}', [AtividadeController::class, 'store'])->name('atividade.store');
-            Route::get('/{evento}/atividades/{atividade_id}/edit', [AtividadeController::class, 'edit'])->name('atividade.edit');
-            Route::put('/{evento}/atividades/{atividade_id}', [AtividadeController::class, 'update'])->name('atividade.update');
-            Route::delete('/{evento}/atividades/{atividade_id}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
+            Route::get('/{id}/atividades/{atividade_id}/edit', [AtividadeController::class, 'edit'])->name('atividade.edit');
+            Route::put('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'update'])->name('atividade.update');
+            Route::delete('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
         });
     });
 });

@@ -122,36 +122,6 @@ class EventoController extends Controller
             array("Attachment" => false));
     }
 
-    public function addOrganizador(Request $request, $id)
-    {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user) {
-            return back()->withErrors(['email' => 'Usuário com este e-mail não encontrado.']);
-        }
-        
-        $registro = Registro::where('user_id', $user->id)
-        ->where('evento_id', $id)
-        ->first();
-
-        if ($registro) {
-            // Atualiza a role do registro existente
-            $registro->update(['role_id' => 2]); // 2 = Organizador
-        } else {
-            Registro::create([
-                'user_id' => $user->id,
-                'evento_id' => $id,
-                'role_id' => 2, // 2 = Organizador
-                'atividade_id' => null,
-            ]);
-        }
-        return back()->route('evento.show', $id)->with('success', 'Organizador vinculado com sucesso!');
-    }
-
     public function eventosProximos()
     {
         $eventosProximos = Evento::where('data_inicio', '>=', Carbon::today())

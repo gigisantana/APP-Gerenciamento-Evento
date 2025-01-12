@@ -76,12 +76,12 @@
                                 <div class="flex ">
                                     @if(($userRole === 1 || $userRole === 2)) {{-- Coordenador ou Organizador --}}
                                         <div class="my-4">
-                                            <a href="{{ route('atividade.create', ['id' => $evento->id]) }}" class=" justify-center bg-orange-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-orange-600">
+                                            <a href="{{ route('atividade.destroy', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-orange-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-orange-600">
                                                 Editar
                                             </a>
                                         </div>
                                         <div class="my-4">
-                                            <a href="{{ route('atividade.create', ['id' => $evento->id]) }}" class=" justify-center bg-red-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-red-600">
+                                            <a href="{{ route('atividade.destroy', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-red-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-red-600">
                                                 Excluir
                                             </a>
                                         </div>
