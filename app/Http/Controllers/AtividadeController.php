@@ -26,10 +26,16 @@ class AtividadeController extends Controller
 
     public function store(Request $request, $id)
     {
+        $evento = Evento::findOrFail($id);
         $request->validate([
             'nome' => 'required|string|max:255',
             'descricao' => 'required|string',
-            'data' => 'required|date',
+            'data' => ['required','date',
+            function ($attribute, $value, $fail) use ($evento) {
+                if ($value < $evento->data_inicio) {
+                    $fail('A data da atividade não pode ser anterior à data de início do evento.');
+                }},
+            ],
             'hora_inicio' => 'required|date_format:H:i',
             'hora_fim' => 'required|date_format:H:i|after:hora_inicio',
         ]);

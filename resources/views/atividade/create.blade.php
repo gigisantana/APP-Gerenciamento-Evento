@@ -31,12 +31,12 @@
             <div class="flex space-x-8"> 
                 <div class="m-4">
                     <x-input-label for="hora_inicio" :value="__('Horário de início:')" />
-                    <x-date-input id="hora_inicio" type="time" name="hora_inicio" />
+                    <input id="hora_inicio" type="time" name="hora_inicio" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm" />
                     <x-input-error :messages="$errors->get('hora_inicio')" class="mt-2" />
                 </div>
                 <div class="m-4">
                     <x-input-label for="hora_fim" :value="__('Horário de término:')" />
-                    <x-date-input id="hora_fim" type="time" name="hora_fim" />
+                    <input id="hora_fim" type="time" name="hora_fim" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm"/>
                     <x-input-error :messages="$errors->get('hora_fim')" class="mt-2" />
                 </div>
             </div>
