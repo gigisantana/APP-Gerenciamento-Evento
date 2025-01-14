@@ -1,69 +1,99 @@
 @extends('layouts.app')
-
-@section('title', 'Editar Evento')
-
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h1 class="text-2xl font-semibold mb-4 text-lime-700">Editar Evento</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <strong>Ocorreu um erro:</strong>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Ocorreu um erro:</strong>
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        <div class="flex">
+            <div class="w-1/2 p-4">
+                
+                <!-- Formulário para editar a atividade -->
+                <div class="">
+                    <form action="{{ route('evento.update', $evento->id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
 
-            <!-- Formulário para editar a atividade -->
-            <div>
-                <form action="{{ route('evento.update', $evento->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="form-group">
-                        <label for="nome">Nome do Evento</label>
-                        <input type="text" class="form-control" id="nome" name="nome" value="{{ old('nome', $evento->nome) }}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="descricao">Descrição</label>
-                        <textarea class="form-control" id="descricao" name="descricao">{{ old('descricao', $evento->descricao) }}</textarea>
-                    </div>
-
-                    <div class="flex space-x-8"> 
-                        <div class="m-4">
-                            <x-input-label for="data_inicio" :value="__('Data de início:')" />
-                            <x-date-input id="data_inicio" type="date" name="data_inicio" />
-                            <x-input-error :messages="$errors->get('data_inicio')" class="mt-2" />
+                        <div class="form-group my-4">
+                            <x-input-label for="nome" :value="__('Nome')" />
+                            <x-text-input id="nome" name="nome" type="text" class="mt-1 block w-full" :value="old('nome', $evento->nome)" required autofocus autocomplete="nome" />
                         </div>
-                        <div class="m-4">
-                            <x-input-label for="data_fim" :value="__('Data de término:')" />
-                            <x-date-input id="data_fim" type="date" name="data_fim" />
-                            <x-input-error :messages="$errors->get('data_fim')" class="mt-2" />
+
+                        <div class="form-group my-4">
+                            <x-input-label for="descricao" :value="__('Descrição')" />
+                            <x-textarea-input id="descricao" name="descricao" :value="old('descricao', $evento->descricao)" required autofocus autocomplete="descricao"/>
+                        </div>
+
+                        <div class="flex my-4"> 
+                            <div class="mr-4">
+                                <x-input-label for="data_inicio" :value="__('Data de início:')" />
+                                <x-date-input id="data_inicio" type="date" name="data_inicio" :value="old('data_inicio', $evento->data_inicio)" required autofocus autocomplete="data_inicio"/>
+                                <x-input-error :messages="$errors->get('data_inicio')" class="mt-2" />
+                                </div>
+                                <div class="mr-4">
+                                <x-input-label for="data_fim" :value="__('Data de término:')" />
+                                <x-date-input id="data_fim" type="date" name="data_fim" :value="old('data_fim', $evento->data_fim)" required autofocus autocomplete="data_fim"/>
+                                <x-input-error :messages="$errors->get('data_fim')" class="mt-2" />
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded-md hover:bg-lime-600">Salvar Alterações</button>
+                    </form>
+                            <button type="button" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md" 
+                            onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'delete-event-modal-{{ $evento->id }}' }))">
+                            Excluir Evento
+                        </div>
+                </div>   
+                <x-modal name="delete-event-modal-{{ $evento->id }}" maxWidth="md">
+                    <div class="p-6">
+                        <h2 class="text-lg font-medium text-gray-900">
+                            Tem certeza de que deseja excluir este evento?
+                        </h2>
+            
+                        <p class="mt-1 text-sm text-gray-600">
+                            Esta ação é irreversível e resultará na exclusão permanente do evento.
+                        </p>
+            
+                        <div class="mt-6 flex justify-end space-x-4">
+                            <x-secondary-button x-on:click="$dispatch('close-modal', 'delete-event-modal-{{ $evento->id }}')">
+                                Cancelar
+                            </x-secondary-button>
+                            <form method="POST" action="{{ route('evento.destroy', $evento->id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <x-danger-button>
+                                    Confirmar Exclusão
+                                </x-danger-button>
+                            </form>
                         </div>
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                    <a href="{{ route('evento.index') }}" class="btn btn-secondary">Cancelar</a>
-                </form>
+                </x-modal>
             </div>
 
-            <!-- Formulário para vincular organizador ao evento -->
-            <div class="">
-                <h2 class="mt-4">Adicionar Organizador</h2>
-                <form action="{{ route('registro.vincular', $evento->id) }}" method="POST">
-                    @csrf
-
-                    <div class="form-group">
-                        <label for="email">Email do Organizador</label>
-                        <input type="email" class="form-control" id="email" name="email" required placeholder="Digite o email do organizador">
-                    </div>
-
-                    <button type="submit" class="btn btn-success mt-2">Vincular</button>
-                </form>
+            
+            <div class="w-1/2 p-6 px-10">
+                <!-- Formulário para vincular organizador ao evento -->
+                <h2 class="font-semibold text-xl text-lime-700 mb-4">Adicionar Organizador</h2>
+                <div class="">
+                    <form action="{{ route('registro.vincular', $evento->id) }}" method="POST">
+                        @csrf
+                            <div class="py-4">
+                                <x-input-label for="email" :value="__('Email do organizador')"/>
+                                <x-text-input type="email" id="email" name="email" class="mt-1 block w-1/2" required placeholder="Digite o email do organizador"/>
+                            </div>
+                            <div>
+                                <x-primary-button type="submit" class="btn btn-success mt-2"> Vincular </x-primary-button>
+                            </div>
+    
+                    </form>
+                </div>
             </div>
         </div>
     </div>

@@ -24,7 +24,6 @@ class AtividadeController extends Controller
         return view('atividade.create', compact('evento'));
     }
 
-
     public function store(Request $request, $id)
     {
         $request->validate([
@@ -55,9 +54,6 @@ class AtividadeController extends Controller
             ->with('success', 'Atividade criada com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($eventoId, $id)
     {
         $evento = Evento::findOrFail($eventoId);
@@ -68,35 +64,53 @@ class AtividadeController extends Controller
         return view('atividade.show', compact('evento', 'atividade', 'userRole'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $atividade = Atividade::find($id);
         return view('atividade.edit', compact(['atividade']));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $atividade = Atividade::find($id);
+
+        $request->validate([
+            'nome' => 'nullable|string|max:255',
+            'descricao' => 'nullable|string',
+            'data' => 'nullable|date|before_or_equal:data_fim',
+            'hora_inicio' => 'nullable|time|before_or_equal:hora_fim',
+            'hora_fim' => 'nullable|time|after_or_equal:hora_inicio',
+        ]);
             
-        $atividade->nome = $request->nome;
-        $atividade->descricao = $request->descricao;
+        if ($request->filled('nome')) {
+            $atividade->nome = $request->nome;
+        }
+        if ($request->filled('descricao')) {
+            $atividade->descricao = $request->descricao;
+        }
+        if ($request->filled('data')) {
+            $atividade->data = $request->data;
+        }
+        if ($request->filled('hora_inicio')) {
+            $atividade->hora_inicio = $request->hora_inicio;
+        }
+        if ($request->filled('hora_fim')) {
+            $atividade->hora_fim = $request->hora_fim;
+        }
+        if ($request->filled('evento_id')) {
+            $atividade->evento_id = $request->evento_id;
+        }
+    
         $atividade->save();
-        return redirect()->route('atividade.index');
+        return redirect()->route('atividade.index')->with('success', 'Atividade atualizada com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $atividade = Atividade::find($id);
-        return redirect()->route('atividade.index');
+        $atividade = Atividade::findOrFail($id);
+
+        $atividade->delete();
+        return redirect()->route('atividade.index')->with('success', 'Evento excluído com sucesso!');
     }
 
     public function report() 

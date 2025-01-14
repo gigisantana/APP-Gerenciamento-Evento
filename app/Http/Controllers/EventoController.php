@@ -83,32 +83,50 @@ class EventoController extends Controller
      */
     public function edit($id)
     {
-        $evento = Evento::find($id);
-        return view('evento.edit', compact(['evento']));
+        $evento = Evento::findOrFail($id);
+        return view('evento.edit', compact('evento'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $evento = Evento::find($id);
+        $evento = Evento::findOrFail($id);
+        
+            $request->validate([
+                'nome' => 'nullable|string|max:255',
+                'descricao' => 'nullable|string',
+                'data_inicio' => 'nullable|date|before_or_equal:data_fim',
+                'data_fim' => 'nullable|date|after_or_equal:data_inicio',
+            ]);
 
-            $evento->nome = $request->nome;
-            $evento->descricao = $request->descricao;
+            if ($request->filled('nome')) {
+                $evento->nome = $request->nome;
+            }
+            if ($request->filled('descricao')) {
+                $evento->descricao = $request->descricao;
+            }
+            if ($request->filled('data_inicio')) {
+                $evento->data_inicio = $request->data_inicio;
+            }
+            if ($request->filled('data_fim')) {
+                $evento->data_fim = $request->data_fim;
+            }
             $evento->save();
-            return redirect()->route('evento.index');
+
+            return redirect()->route('evento.show', $evento->id)->with('success', 'Evento atualizado com sucesso!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $evento = Evento::find($id);
+        $evento = Evento::findOrFail($id);
 
-            $evento->delete();
-            return redirect()->route('evento.index');
+        $evento->delete();
+        return redirect()->route('dashboard')->with('success', 'Evento excluído com sucesso!');
     }
 
     public function report() 

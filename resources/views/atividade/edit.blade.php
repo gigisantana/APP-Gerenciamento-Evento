@@ -18,14 +18,14 @@
     @endif
 
     <!-- Formulário para editar a atividade -->
-    <div>
-        <form action="{{ route('atividades.update', $atividade->id) }}" method="POST">
+    <div class="flex m-2 justify-around">
+        <form action="{{ route('atividade.update', $atividade->id) }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="form-group">
-                <label for="nome">Nome da Atividade</label>
-                <input type="text" class="form-control" id="nome" name="nome" value="{{ old('nome', $atividade->nome) }}" required>
+                <x-input-label for="nome">Nome da Atividade</label>
+                <x-text-input type="text" class="form-control" id="nome" name="nome" value="{{ old('nome', $atividade->nome) }}" required>
             </div>
 
             <div class="form-group">
@@ -62,7 +62,34 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-            <a href="{{ route('atividades.index') }}" class="btn btn-secondary">Cancelar</a>
+            <button type="button" class="bg-red-500 hover:bg-red-600 text-white" onclick="document.getElementById('delete-event-modal-{{ $atividade->id }}').showModal()">
+                Excluir Evento
+                </button>
+                <x-modal name="confirm-delete-modal" maxWidth="md">
+                    <div class="p-6">
+                        <h2 class="text-lg font-medium text-gray-900">
+                            Tem certeza de que deseja excluir esta atividade?
+                        </h2>
+                
+                        <p class="mt-1 text-sm text-gray-600">
+                            Esta ação é irreversível e resultará na exclusão permanente da atividade.
+                        </p>
+                
+                        <div class="mt-6 flex justify-end space-x-4">
+                            <x-secondary-button x-on:click="$dispatch('close-modal', 'confirm-delete-modal')">
+                                Cancelar
+                            </x-secondary-button>
+                
+                            <form method="POST" action="{{ route('atividade.destroy', $atividade->id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <x-danger-button>
+                                    Confirmar Exclusão
+                                </x-danger-button>
+                            </form>
+                        </div>
+                    </div>
+                </x-modal>
         </form>
     </div>
     <div class="">

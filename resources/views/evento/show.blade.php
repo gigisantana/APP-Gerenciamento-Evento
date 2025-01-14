@@ -2,15 +2,40 @@
 @section('content')
     <div class="container mx-auto px-4">
         <!-- Cabeçalho do Evento -->
-        <div class="flex justify-between pb-2">
+        <div class="flex justify-between">
             @if($userRole === 1) {{-- Coordenador --}}
-                <div class="mb-2">
-                    <a href="{{ route('evento.edit', ['id' => $evento->id]) }}" class=" justify-center bg-lime-500 text-white text-center px-4 py-2 my-4  mr-2 rounded-md hover:bg-lime-600">
+                <div class="">
+                    <a href="{{ route('evento.edit', ['id' => $evento->id]) }}" class="justify-center bg-lime-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-lime-600">
                         Editar Evento
                     </a>
-                    <a href="{{ route('evento.destroy', ['id' => $evento->id]) }}" class=" justify-center bg-red-500 text-white text-center px-4 py-2 my-4 rounded-md hover:bg-red-600">
+                    <button class="bg-red-500 hover:bg-red-600 justify-center text-center text-white px-4 py-1.5 my-4 mr-2 rounded-md" 
+                        onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'delete-event-modal-{{ $evento->id }}' }))">
                         Excluir Evento
-                    </a>
+                    </button>
+                        <x-modal name="delete-event-modal-{{ $evento->id }}" maxWidth="md">
+                            <div class="p-6">
+                                <h2 class="text-lg font-medium text-gray-900">
+                                    Tem certeza de que deseja excluir este evento?
+                                </h2>
+                    
+                                <p class="mt-1 text-sm text-gray-600">
+                                    Esta ação é irreversível e resultará na exclusão permanente do evento.
+                                </p>
+                    
+                                <div class="mt-6 flex justify-end space-x-4">
+                                    <x-secondary-button x-on:click="$dispatch('close-modal', 'delete-event-modal-{{ $evento->id }}')">
+                                        Cancelar
+                                    </x-secondary-button>
+                                    <form method="POST" action="{{ route('evento.destroy', $evento->id) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-danger-button>
+                                            Confirmar Exclusão
+                                        </x-danger-button>
+                                    </form>
+                                </div>
+                            </div>
+                        </x-modal>              
                 </div>
             @endif    
         </div>
@@ -76,7 +101,7 @@
                                 <div class="flex ">
                                     @if(($userRole === 1 || $userRole === 2)) {{-- Coordenador ou Organizador --}}
                                         <div class="my-4">
-                                            <a href="{{ route('atividade.destroy', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-orange-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-orange-600">
+                                            <a href="{{ route('atividade.edit', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-orange-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-orange-600">
                                                 Editar
                                             </a>
                                         </div>
