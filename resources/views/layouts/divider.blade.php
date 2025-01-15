@@ -16,6 +16,9 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css'])
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+        <script src="https://unpkg.co/gsap@3/dist/gsap.min.js" defer></script>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+
 
     </head>
     <body class="font-sans antialiased bg-lime-500">
@@ -32,15 +35,17 @@
             @endif
 
             <!-- Page Content -->
-            <main class="mx-auto my-auto sm:px-6 lg:px-8 px-10 py-8">
+            <main class="mx-auto my-auto sm:px-6 lg:px-8 px-10 py-4">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="align-top flex flex-wrap divide-x-2 divide-dashed divide-lime-500">
                         <div class="p-6 basis-2/5">                        
                             @yield('content')
                         </div>
-                        <div class="p-6 basis-3/5 px-8"> 
+                        <div class="p-4 basis-3/5 px-8"> 
                             <h1 class="text-2xl font-bold text-lime-700 ">Mapa do Campus Paranaguá</h1>
-                            <img src="{{ asset('images/mapa-IFPR.svg') }}" alt="Mapa do Campus" class="mapa-campus w-4/6 justify-self-center">
+                            <div class="relative overflow-hidden">
+                                {!! file_get_contents(public_path('images/mapa-IFPR-2.svg')) !!}
+                            </div>
                         </div>
                     </div>
                 </div>
