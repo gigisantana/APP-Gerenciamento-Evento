@@ -43,7 +43,7 @@
                         </div>
                         <div class="p-4 basis-3/5 px-8"> 
                             <h1 class="text-2xl font-bold text-lime-700 ">Mapa do Campus Paranaguá</h1>
-                            <div class="relative overflow-hidden">
+                            <div class="flex justify-center items-center">
                                 {!! file_get_contents(public_path('images/mapa-IFPR-2.svg')) !!}
                             </div>
                         </div>

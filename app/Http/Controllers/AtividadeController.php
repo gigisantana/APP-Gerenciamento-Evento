@@ -70,22 +70,48 @@ class AtividadeController extends Controller
         return view('atividade.show', compact('evento', 'atividade', 'userRole'));
     }
 
-    public function edit($id)
-    {
-        $atividade = Atividade::find($id);
-        return view('atividade.edit', compact(['atividade']));
+    public function edit($id, $atividade_id)
+{
+    // Busca a atividade com o ID correto
+    $atividade = Atividade::where('id', $atividade_id)
+        ->where('evento_id', $id)
+        ->first();
+
+    // Verifica se a atividade foi encontrada
+    if (!$atividade) {
+        abort(404, 'Atividade não encontrada.');
     }
 
-    public function update(Request $request, $id)
+    // Garante que o evento está associado
+    $evento = $atividade->evento;
+
+    // Caso o evento não esteja associado
+    if (!$evento) {
+        abort(404, 'Evento associado à atividade não encontrado.');
+    }
+
+    return view('atividade.edit', compact('atividade', 'evento'));
+}
+
+    public function update(Request $request, $id, $atividade_id)
     {
-        $atividade = Atividade::find($id);
+        $atividade = Atividade::find($atividade_id);
+        $evento = Evento::findOrFail($id);
 
         $request->validate([
             'nome' => 'nullable|string|max:255',
             'descricao' => 'nullable|string',
-            'data' => 'nullable|date|before_or_equal:data_fim',
-            'hora_inicio' => 'nullable|time|before_or_equal:hora_fim',
-            'hora_fim' => 'nullable|time|after_or_equal:hora_inicio',
+            'data' => [
+                'nullable',
+                'date',
+                function ($attribute, $value, $fail) use ($evento) {
+                    if ($value < $evento->data_inicio || $value > $evento->data_fim) {
+                        $fail("A data da atividade deve estar entre {$evento->data_inicio->format('d/m/Y')} e {$evento->data_fim->format('d/m/Y')}.");
+                    }
+                },
+            ],
+            'hora_inicio' => ['nullable', 'regex:/^(?:[01]\d|2[0-3]):[0-5]\d$/', 'before_or_equal:hora_fim'],
+            'hora_fim' => ['nullable', 'regex:/^(?:[01]\d|2[0-3]):[0-5]\d$/', 'after_or_equal:hora_inicio'],
         ]);
             
         if ($request->filled('nome')) {
@@ -108,12 +134,14 @@ class AtividadeController extends Controller
         }
     
         $atividade->save();
-        return redirect()->route('atividade.index')->with('success', 'Atividade atualizada com sucesso!');
+        return redirect()->route('atividade.edit', ['id' => $id, 'atividade_id' => $atividade_id])
+        ->with('success', 'Atividade atualizada com sucesso!');
     }
 
-    public function destroy($id)
+    public function destroy($id, $atividade_id)
     {
-        $atividade = Atividade::findOrFail($id);
+        $atividade = Atividade::findOrFail($atividade_id);
+        $evento = Evento::findOrFail($id);
 
         $atividade->delete();
         return redirect()->route('atividade.index')->with('success', 'Evento excluído com sucesso!');

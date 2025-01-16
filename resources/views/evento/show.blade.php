@@ -64,62 +64,68 @@
             @if($evento->atividades->count())
                 <div class="flex flex-col gap-6">
                     @foreach ($evento->atividades as $atividade)
-                    <div class="border border-lime-200 rounded-md p-4 shadow-md">
-                        <h3 class="text-lg font-bold text-lime-700">{{ $atividade->nome }}</h3>
-                        <p class="text-sm text-gray-600">{{ $atividade->descricao }}</p>
-                        <p class="mt-2 text-sm text-gray-600">
-                            <strong>Data:</strong> {{ $atividade->data->format('d/m/Y') }}
-                        </p>
-                        <p class="text-sm text-gray-600">
-                            <strong>Horário:</strong> {{ $atividade->hora_inicio->format('H:i') }} - {{ $atividade->hora_fim->format('H:i') }}
-                        </p>
-                        <p class="text-sm text-gray-600">
-                            <strong>Local:</strong>
-                        </p>
+                        <div class="border border-lime-200 rounded-md p-4 shadow-md">
+                            <h3 class="text-lg font-bold text-lime-700">{{ $atividade->nome }}</h3>
+                            <p class="text-sm text-gray-600">{{ $atividade->descricao }}</p>
+                            <p class="mt-2 text-sm text-gray-600">
+                                <strong>Data:</strong> {{ $atividade->data->format('d/m/Y') }}
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <strong>Horário:</strong> {{ $atividade->hora_inicio->format('H:i') }} - {{ $atividade->hora_fim->format('H:i') }}
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <strong>Local:</strong>
+                            </p>
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!!!!!
+                            <div class="flex justify-center items-center">
+                            @auth
+                                @php
+                                    $registro = $atividade->registro->firstWhere('user_id', auth()->id());
+                                    $userRole = $registro->role->id ?? null;
 
-                        <div class="flex justify-center items-center">
-                        @auth
-                            @php
-                                $registro = $atividade->registro ? $atividade->registro->where('user_id', auth()->id())->first() : null;
-                            @endphp
+                                    
+                                @endphp
+                                
 
-                            @if ($registro && $userRole === 3)
-                                <button disabled class="bg-gray-300 text-gray-500 px-4 py-2 mt-4 rounded-md">
-                                    Inscrito!
-                                </button>
-                            @elseif(!$registro)
-                                <form action="{{ route('registro.inscrever', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" method="POST" class="mt-4">
-                                    @csrf
-                                    <input type="hidden" name="evento_id" value="{{ $evento->id }}">
-                                    <input type="hidden" name="atividade_id" value="{{ $atividade->id }}">
-                                    <input type="hidden" name="role_id" value="3"> <!-- Inscrito -->
-                                    <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded-md hover:bg-lime-600">
-                                        Inscrever-se
+                                @if ($registro && $userRole === 3)
+                                    <button disabled class="bg-gray-300 text-gray-500 px-4 py-2 mt-4 rounded-md">
+                                        Inscrito!
                                     </button>
-                                </form>
-                            @elseif($registro && $userRole === 1 || $userRole === 2)
-                                <div class="flex ">
-                                    @if(($userRole === 1 || $userRole === 2)) {{-- Coordenador ou Organizador --}}
-                                        <div class="my-4">
-                                            <a href="{{ route('atividade.edit', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-orange-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-orange-600">
-                                                Editar
-                                            </a>
-                                        </div>
-                                        <div class="my-4">
-                                            <a href="{{ route('atividade.destroy', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-red-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-red-600">
-                                                Excluir
-                                            </a>
-                                        </div>
-                                    @endif
-                                </div>
-                            @else
-                                <a href="{{ route('login') }}" class=" justify-center bg-lime-500 text-white text-center px-4 py-2 mt-4 rounded-md hover:bg-lime-600">
-                                    Inscrever-se
-                                </a>
-                            @endif
-                        @endauth
+                                @elseif(!$registro)
+                                    <form action="{{ route('registro.inscrever', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" method="POST" class="mt-4">
+                                        @csrf
+                                        <input type="hidden" name="evento_id" value="{{ $evento->id }}">
+                                        <input type="hidden" name="atividade_id" value="{{ $atividade->id }}">
+                                        <input type="hidden" name="role_id" value="3"> <!-- Inscrito -->
+                                        <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded-md hover:bg-lime-600">
+                                            Inscrever-se
+                                        </button>
+                                    </form>
+                                @elseif($registro && ($userRole === 1 || $userRole === 2))
+                                    <div class="flex ">
+                                        @if(($userRole === 1 || $userRole === 2)) {{-- Coordenador ou Organizador --}}
+                                            <div class="my-4">
+                                                <a href="{{ route('atividade.edit', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-orange-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-orange-600">
+                                                    Editar
+                                                </a>
+                                            </div>
+                                            <div class="my-4">
+                                                <a href="{{ route('atividade.destroy', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-red-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-red-600">
+                                                    Excluir
+                                                </a>
+                                            </div>
+                                        @endif
+                                    </div>
+                                
+                                @endif
+                                @endauth
+                                    @guest
+                                        <a href="{{ route('login') }}" class=" justify-center bg-lime-500 text-white text-center px-4 py-2 mt-4 rounded-md hover:bg-lime-600">
+                                            Inscrever-se!
+                                        </a>
+                                    @endguest
+                            </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
                 <!-- modal de confirmação de inscrição -->
