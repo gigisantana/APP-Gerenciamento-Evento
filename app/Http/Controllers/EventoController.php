@@ -126,7 +126,7 @@ class EventoController extends Controller
         $evento = Evento::findOrFail($id);
 
         $evento->delete();
-        return redirect()->route('dashboard')->with('success', 'Evento excluído com sucesso!');
+        return redirect()->route('home')->with('success', 'Evento excluído com sucesso!');
     }
 
     public function report() 
@@ -146,6 +146,6 @@ class EventoController extends Controller
         ->orderBy('data_inicio', 'asc')
         ->get();
 
-    return view('dashboard', compact('eventosProximos'));
+    return view('home', compact('eventosProximos'));
     }
 }

@@ -76,14 +76,11 @@
                             <p class="text-sm text-gray-600">
                                 <strong>Local:</strong>
                             </p>
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!!!!!
                             <div class="flex justify-center items-center">
                             @auth
                                 @php
                                     $registro = $atividade->registro->firstWhere('user_id', auth()->id());
-                                    $userRole = $registro->role->id ?? null;
-
-                                    
+                                    $userRole = $registro->role->id ?? null;                                    
                                 @endphp
                                 
 
@@ -104,16 +101,40 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!!!!!
                                 @elseif($registro && ($userRole === 1 || $userRole === 2))
                                     <div class="flex ">
                                         @if(($userRole === 1 || $userRole === 2)) {{-- Coordenador ou Organizador --}}
-                                            <div class="my-4">
-                                                <a href="{{ route('atividade.edit', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-orange-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-orange-600">
+                                            <div class="my-3.5">
+                                                <a href="{{ route('atividade.edit', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class="justify-center bg-orange-500 hover:bg-orange-600 text-white text-center px-4 py-2 my-2 mr-2 rounded-md ">
                                                     Editar
                                                 </a>
                                             </div>
-                                            <div class="my-4">
-                                                <a href="{{ route('atividade.destroy', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class=" justify-center bg-red-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-red-600">
+                                            <div class="mt-2">
+                                                <button type="button" class="justify-center bg-red-500 hover:bg-red-600 text-white text-center px-3.5 py-1.5 rounded-md " onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'delete-event-modal-{{ $atividade->id }}' }))">
                                                     Excluir
-                                                </a>
+                                                </button>
                                             </div>
+                                            <x-modal name="delete-event-modal-{{ $atividade->id }}" maxWidth="md">
+                                                <div class="p-6">
+                                                    <h2 class="text-lg font-medium text-gray-900">
+                                                        Tem certeza de que deseja excluir esta atividade?
+                                                    </h2>
+                                        
+                                                    <p class="mt-1 text-sm text-gray-600">
+                                                        Esta ação é irreversível e resultará na exclusão permanente da atividade.
+                                                    </p>
+                                        
+                                                    <div class="mt-6 flex justify-end space-x-4">
+                                                        <x-secondary-button x-on:click="$dispatch('close-modal', 'delete-event-modal-{{ $atividade->id }}')">
+                                                            Cancelar
+                                                        </x-secondary-button>
+                                                        <form method="POST" action="{{ route('atividade.destroy', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <x-danger-button>
+                                                                Confirmar Exclusão
+                                                            </x-danger-button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </x-modal>
                                         @endif
                                     </div>
                                 

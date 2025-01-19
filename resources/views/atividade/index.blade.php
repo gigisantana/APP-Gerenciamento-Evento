@@ -5,10 +5,10 @@
 @section('content')
     <div class="d-flex justify-content-between mb-3">
         <h1>Atividades</h1>
-        <a href="{{ route('atividades.create') }}" class="btn btn-primary">Criar Nova Atividade</a>
+        <a href="{{ route('atividade.create', $evento->id) }}" class="btn btn-primary">Criar Nova Atividade</a>
     </div>
 
-    @if($atividades->count())
+    @if($atividade)
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -27,8 +27,8 @@
                         <td>{{ \Carbon\Carbon::parse($atividade->data_inicio)->format('d/m/Y') }}</td>
                         <td>{{ $atividade->data_fim ? \Carbon\Carbon::parse($atividade->data_fim)->format('d/m/Y') : '-' }}</td>
                         <td>
-                            <a href="{{ route('atividades.show', $atividade->id) }}" class="btn btn-info btn-sm">Ver</a>
-                            <a href="{{ route('atividades.edit', $atividade->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="{{ route('atividade.show', $atividade->id) }}" class="btn btn-info btn-sm">Ver</a>
+                            <a href="{{ route('atividade.edit', $atividade->id) }}" class="btn btn-warning btn-sm">Editar</a>
                             <form action="{{ route('atividades.destroy', $atividade->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')

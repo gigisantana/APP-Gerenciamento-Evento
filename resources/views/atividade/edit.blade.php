@@ -15,7 +15,7 @@
             </div>
             @endif
                         
-            <form action="{{ route('atividade.update', ['id' => $atividade->id, 'atividade_id' => $atividade->id]) }}" method="POST">
+            <form action="{{ route('atividade.update', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" method="POST">
                 @csrf
                 @method('PATCH')
                 
@@ -27,19 +27,20 @@
                 </div>
 
                 <div class="m-4">
-                    <x-input-label for="data_inicio" value="Data:"/>
-                    <x-date-input type="date" class="form-control" id="data_inicio" name="data" value="{{ old('data', $atividade->data->format('Y-m-d')) }}" required/>
+                    <x-input-label for="data" value="Data:"/>
+                    <x-date-input type="date" id="data" name="data" value="{{ old('data', $atividade->data ? $atividade->data->format('Y-m-d') : '') }}" required/>
+                    <x-input-error :messages="$errors->get('data')" class="mt-2" />
                 </div>
 
                 <div class="flex space-x-8"> 
                     <div class="m-4">
-                        <x-input-label for="hora_inicio" value="Horário de início:" />
-                        <input id="hora_inicio" type="time" name="hora_inicio" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm" />
-                        <x-input-error :messages="$errors->get('hora_inicio')" class="mt-2" />
+                        <x-input-label for="hora" value="Horário de início:" />
+                        <input id="hora" type="time" name="hora" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm" value="{{ old('hora_inicio', $atividade->hora_inicio ? $atividade->hora_inicio->format('H:i') : '') }}" />
+                        <x-input-error :messages="$errors->get('hora')" class="mt-2" />
                     </div>
                     <div class="m-4">
                         <x-input-label for="hora_fim" value="Horário de término:" />
-                        <input id="hora_fim" type="time" name="hora_fim" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm" />
+                        <input id="hora_fim" type="time" name="hora_fim" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm" value="{{ old('hora_fim', $atividade->hora_fim ? $atividade->hora_fim->format('H:i') : '') }}" />
                         <x-input-error :messages="$errors->get('hora_fim')" class="mt-2" />
                     </div>
                 </div>
@@ -71,7 +72,7 @@
                             <x-secondary-button x-on:click="$dispatch('close-modal', 'delete-event-modal-{{ $atividade->id }}')">
                                 Cancelar
                             </x-secondary-button>
-                            <form method="POST" action="{{ route('atividade.destroy', ['id' => $atividade->id, 'atividade_id' => $atividade->id]) }}">
+                            <form method="POST" action="{{ route('atividade.destroy', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}">
                                 @csrf
                                 @method('DELETE')
                                 <x-danger-button>

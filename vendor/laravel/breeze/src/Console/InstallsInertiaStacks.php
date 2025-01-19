@@ -98,7 +98,7 @@ trait InstallsInertiaStacks
         copy(__DIR__.'/../../stubs/inertia-common/routes/auth.php', base_path('routes/auth.php'));
 
         // "Dashboard" Route...
-        $this->replaceInFile('/home', '/dashboard', app_path('Providers/RouteServiceProvider.php'));
+        $this->replaceInFile('/home', '/home', app_path('Providers/RouteServiceProvider.php'));
 
         // Tailwind / Vite...
         copy(__DIR__.'/../../stubs/default/resources/css/app.css', resource_path('css/app.css'));
@@ -266,7 +266,7 @@ trait InstallsInertiaStacks
         copy(__DIR__.'/../../stubs/inertia-common/routes/auth.php', base_path('routes/auth.php'));
 
         // "Dashboard" Route...
-        $this->replaceInFile('/home', '/dashboard', app_path('Providers/RouteServiceProvider.php'));
+        $this->replaceInFile('/home', '/home', app_path('Providers/RouteServiceProvider.php'));
 
         // Tailwind / Vite...
         copy(__DIR__.'/../../stubs/default/resources/css/app.css', resource_path('css/app.css'));

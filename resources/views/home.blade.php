@@ -1,23 +1,21 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Home | Gestor de Eventos - IFPR</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-    </head>
-    <body>
-        <x-app-layout>
-            <div class="">
-                <div class="mx-auto sm:px-6 lg:px-8 bg-lime-500 px-10 py-12">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg align-top justify-between">
+<!-- Página de home de eventos, com mapa e uma lista simples de eventos próximos -->
+@extends('layouts.divider')
+@section('content')
+        <h1 class="text-2xl font-bold text-lime-700 mb-4">Eventos do IFPR</h1>
+        <!-- COLOCAR AQUI A LÓGICA PRA APARECER OS EVENTOS PRÓXIMOS!!! -->
+        <p class="text-gray-500">Aqui você encontra os eventos próximos Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore dicta voluptate ducimus non necessitatibus, neque expedita fugiat quos. Quam fugiat quisquam eaque tempora vero repellat, officia ducimus minima at dolores? </p>
+        <div class="grid grid-rows-1 md:grid-rows-3 lg:grid-rows-4 gap-6 my-6">
+            @foreach($eventosProximos as $evento)
+            <div onclick="window.location.href='{{ route('evento.show', ['id' => $evento->id]) }}'" 
+                class="cursor-pointer bg-white shadow-md rounded-lg hover:shadow-lg transition-shadow duration-300">
+                <div class="bg-lime-50 shadow-md rounded-lg overflow-hidden">
+                    <div class="p-4">
+                        <h2 class="text-lg font-semibold text-green-700">{{ $evento->nome }}</h2>
+                        <p class="text-sm text-gray-600 mt-2">{{ $evento->descricao }}</p>
+                        <p class="text-sm text-gray-500 mt-2">Data: {{ $evento->data_inicio->format('d/m/Y') }} - {{ $evento->data_fim->format('d/m/Y') }}</p>
+                    </div>
                 </div>
             </div>
-        </x-app-layout>
-    </body>
-</html>
-
+            @endforeach
+        </div>
+@endsection

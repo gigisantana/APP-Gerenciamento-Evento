@@ -8,6 +8,7 @@ use App\Models\Evento;
 use App\Models\Registro;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AtividadeController extends Controller
 {
@@ -95,8 +96,15 @@ class AtividadeController extends Controller
 
     public function update(Request $request, $id, $atividade_id)
     {
-        $atividade = Atividade::find($atividade_id);
-        $evento = Evento::findOrFail($id);
+        $atividade = Atividade::findOrFail($atividade_id)->load('evento');
+        $evento = $atividade->evento;
+
+        // dd($request->input('data'));
+        // dd([
+        //     'data_enviada' => $request->input('data'),
+        //     'evento_data_inicio' => $evento->data_inicio,
+        //     'evento_data_fim' => $evento->data_fim,
+        // ]);
 
         $request->validate([
             'nome' => 'nullable|string|max:255',
@@ -144,7 +152,7 @@ class AtividadeController extends Controller
         $evento = Evento::findOrFail($id);
 
         $atividade->delete();
-        return redirect()->route('atividade.index')->with('success', 'Evento excluído com sucesso!');
+        return redirect()->route('evento.show', compact('evento', 'userRole'))->with('success', 'Atividade excluída com sucesso!');
     }
 
     public function report() 

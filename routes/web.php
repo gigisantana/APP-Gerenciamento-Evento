@@ -8,15 +8,16 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [EventoController::class, 'eventosProximos'])->name('dashboard');
+Route::get('/home', [EventoController::class, 'eventosProximos'])->name('home');
+
+Route::get('/', function () {
+    return redirect()->route('home');
+});
 
 Route::get('/sobre', function () {
     return view('sobre');
 })->name('sobre');
 
-Route::get('/home', function () {
-    return view('home');
-})->middleware(['auth', 'verified'])->name('home');
 
 // Gerencia evento (precisa estar autenticado e verificado como servidor)
 Route::middleware('auth', 'verified')->group(function(){
