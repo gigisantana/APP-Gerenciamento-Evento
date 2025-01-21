@@ -75,6 +75,11 @@
                             </p>
                             <p class="text-sm text-gray-600">
                                 <strong>Local:</strong>
+                                @if($atividade->local)
+                                    {{ $atividade->local->espaco }} ({{ $atividade->local->bloco }})
+                                @else
+                                    Não definido
+                                @endif
                             </p>
                             <div class="flex justify-center items-center">
                             @auth

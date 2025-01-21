@@ -19,9 +19,13 @@ return new class extends Migration
             $table->time('hora_inicio');
             $table->time('hora_fim');
             $table->unsignedBigInteger('evento_id');
+            $table->unsignedBigInteger('categoria_id')->nullable();
+            $table->unsignedBigInteger('local_id')->nullable();
             $table->timestamps();
-
+            
+            $table->foreign('local_id')->references('id')->on('locais')->onDelete('set null');
             $table->foreign('evento_id')->references('id')->on('eventos')->onDelete('cascade');
+            $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('set null');
         });
     }
 

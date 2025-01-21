@@ -4,11 +4,14 @@ use App\Http\Controllers\AtividadeController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistroController;
+use App\Http\Controllers\LocalController;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/home', [EventoController::class, 'eventosProximos'])->name('home');
+//Route::get('/locais/{bloco}', [LocalController::class, 'getEspacos'])->name('locais.espacos');
+
 
 Route::get('/', function () {
     return redirect()->route('home');

@@ -19,12 +19,28 @@
         <script src="https://unpkg.co/gsap@3/dist/gsap.min.js" defer></script>
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
 
+        <style>
+            #tooltip {
+                position: absolute;
+                display: none;
+                background: rgba(0, 0, 0, 0.7);
+                color: white;
+                padding: 5px;
+                border-radius: 10px;
+                pointer-events: none;
+            }
+        </style>
+
 
     </head>
     <body class="font-sans antialiased bg-lime-500">
         <div class="min-h-screen">
             @include('layouts.navigation')
-
+                @if (session('message'))
+                    <div class="bg-green-100 text-green-700 p-4 rounded-md shadow-md mb-6">
+                        {{ session('message') }}
+                    </div>
+                @endif
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="">
@@ -46,16 +62,39 @@
                             <div class="flex justify-center items-center">
                                 {!! file_get_contents(public_path('images/mapa-IFPR-2.svg')) !!}
                             </div>
+
+                            <!-- Tooltip -->
+                            <div id="tooltip"></div>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const tooltip = document.getElementById('tooltip');
+                                    const elementos = document.querySelectorAll('[data-tooltip]'); // Elementos com atributo "data-tooltip"
+                            
+                                    // Adiciona os eventos para cada elemento
+                                    elementos.forEach(elemento => {
+                                        elemento.addEventListener('mouseenter', function (event) {
+                                            tooltip.innerHTML = elemento.getAttribute('data-tooltip');
+                                            tooltip.style.display = 'block';
+                                            tooltip.style.left = event.pageX + 'px';
+                                            tooltip.style.top = (event.pageY + 10) + 'px';
+                                        });
+                            
+                                        elemento.addEventListener('mousemove', function (event) {
+                                            tooltip.style.left = event.pageX + 'px';
+                                            tooltip.style.top = (event.pageY + 10) + 'px';
+                                        });
+                            
+                                        elemento.addEventListener('mouseleave', function () {
+                                            tooltip.style.display = 'none';
+                                        });
+                                    });
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
-                <!--
-                @if (session('message'))
-                <div class="bg-green-100 text-green-700 p-4 rounded-md shadow-md mb-6">
-                    {{ session('message') }}
-                </div>
-                @endif
-            -->
+                
             </main>
         </div>
     </body>

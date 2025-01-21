@@ -35,8 +35,8 @@
                 <div class="flex space-x-8"> 
                     <div class="m-4">
                         <x-input-label for="hora" value="Horário de início:" />
-                        <input id="hora" type="time" name="hora" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm" value="{{ old('hora_inicio', $atividade->hora_inicio ? $atividade->hora_inicio->format('H:i') : '') }}" />
-                        <x-input-error :messages="$errors->get('hora')" class="mt-2" />
+                        <input id="hora_inicio" type="time" name="hora_inicio" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm" value="{{ old('hora_inicio', $atividade->hora_inicio ? $atividade->hora_inicio->format('H:i') : '') }}" />
+                        <x-input-error :messages="$errors->get('hora_inicio')" class="mt-2" />
                     </div>
                     <div class="m-4">
                         <x-input-label for="hora_fim" value="Horário de término:" />
@@ -50,6 +50,68 @@
                     <x-textarea-input id="descricao" rows="5" class="mt-2 placeholder:text-sm placeholder:text-gray-400" name="descricao" value="{{ old('descricao', $atividade->descricao) }}" required autofocus autocomplete="descricao"/>
                 </div>
 
+                <div class="form-group">
+                    <x-input-label for="bloco" value="Bloco:" />
+                    <select name="bloco" id="bloco" class="form-control" value="{{ old('bloco', $atividade->local->bloco ?? '') }}" required>
+                        <option value="">Selecione o bloco</option>
+                        @foreach ($locais->unique('bloco') as $local)
+                        <option value="{{ $local->bloco }}" 
+                            {{ $atividade->local && $local->bloco == $atividade->local->bloco ? 'selected' : '' }}>
+                                {{ $local->bloco }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <x-input-label for="local_id" value="Espaço:" />
+                    <select name="local_id" id="espaco" class="form-control" value="{{ old('espaco', $atividade->local->espaco ?? '') }}" required>
+                        <option value="">Selecione o espaço</option>
+                        @foreach ($locais as $local)
+                            <option 
+                                value="{{ $local->id }}" 
+                                {{ isset($atividade->local) && $local->id == $atividade->local->id ? 'selected' : '' }}>
+                                {{ $local->espaco }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const blocoSelect = document.getElementById('bloco');
+                        const espacoSelect = document.getElementById('espaco');
+
+                        const locais = @json($locais);
+                        
+                        // Função para carregar espaços
+                        function carregarEspacos(blocoSelecionado) {
+                            espacoSelect.innerHTML = '<option value="">Selecione o espaço</option>';
+                            
+                            const espacosFiltrados = locais.filter(local => local.bloco === blocoSelecionado);
+                            
+                            espacosFiltrados.forEach(local => {
+                                const option = document.createElement('option');
+                                option.value = local.bloco + '-' + local.espaco;
+                                option.textContent = local.espaco;
+                                espacoSelect.appendChild(option);
+                            });
+                        }
+
+                        // Carrega os espaços ao selecionar um bloco
+                        blocoSelect.addEventListener('change', function () {
+                            carregarEspacos(this.value);
+                        });
+
+                        carregarEspacos('{{ old('bloco', $atividade->local ? $atividade->local->bloco : '') }}');
+
+                        const selectedLocalId = '{{ old('local_id', $atividade->local ? $atividade->local->bloco . '-' . $atividade->local->espaco : '') }}';
+
+                        if (selectedLocalId) {
+                            espacoSelect.value = selectedLocalId;
+                        }
+                    });
+                </script>
 
                 <div class="m-6">
                     <button type="submit" class="bg-lime-500 text-white text-lg px-4 py-2 rounded-md hover:bg-lime-600">Salvar Alterações</button>

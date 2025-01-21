@@ -49,6 +49,64 @@
                 <div class="m-4 flex justify-center items-center">
                     <button type="submit" class="bg-lime-500 text-white text-lg px-4 py-2 rounded-md hover:bg-lime-600">Criar Atividade</button>
                 </div>
+
+                <!-- Bloco Select -->
+                <div class="form-group">
+                    <x-input-label for="bloco" value="Bloco:" />
+                    <select name="bloco" id="bloco" class="form-control" required>
+                        <option value="">Selecione o bloco</option>
+                        @foreach ($locais->unique('bloco') as $local)
+                            <option value="{{ $local->bloco }}" {{ old('bloco', $atividade->local->bloco) === $local->bloco ? 'selected' : '' }}>{{ $local->bloco }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Espaço Select -->
+                <div class="form-group">
+                    <x-input-label for="local_id" value="Espaço:" />
+                    <select name="local_id" id="espaco" class="form-control" required>
+                        <option value="">Selecione o espaço</option>
+                    </select>
+                </div>
+                
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const blocoSelect = document.getElementById('bloco');
+                        const espacoSelect = document.getElementById('espaco');
+                        
+                        // Variável que contém todos os locais com blocos e espaços
+                        const locais = @json($locais);
+                        
+                        // Função para carregar espaços
+                        function carregarEspacos(blocoSelecionado) {
+                            espacoSelect.innerHTML = '<option value="">Selecione o espaço</option>';
+                            
+                            const espacosFiltrados = locais.filter(local => local.bloco === blocoSelecionado);
+                            
+                            espacosFiltrados.forEach(local => {
+                                const option = document.createElement('option');
+                                option.value = local.bloco + '-' + local.espaco;
+                                option.textContent = local.espaco;
+                                espacoSelect.appendChild(option);
+                            });
+                        }
+
+                        // Carrega os espaços ao selecionar um bloco
+                        blocoSelect.addEventListener('change', function () {
+                            carregarEspacos(this.value);
+                        });
+
+                        // Carrega os espaços do bloco já selecionado ao carregar a página
+                        carregarEspacos('{{ old('bloco', $atividade->local->bloco) }}');
+
+                        // Preenche o select de espaço com o valor do local_id
+                        const selectedLocalId = '{{ old('local_id', $atividade->local->bloco . '-' . $atividade->local->espaco) }}';
+                        if (selectedLocalId) {
+                            espacoSelect.value = selectedLocalId;
+                        }
+                    });
+                </script>
             </form>
         </div>
         <div class="flex flex-col px-4 basis-2/4 justify-top">
@@ -56,8 +114,7 @@
                 <h1 class="text-3xl font-bold">{{ $evento->nome }}</h1>
                 <p class="mt-2 text-lg">{{ $evento->descricao }}</p>
                 <p class="mt-4">
-                    <strong>Início:</strong> {{ $evento->data_inicio->format('d/m/Y') }}
-                      
+                    <strong>Início:</strong> {{ $evento->data_inicio->format('d/m/Y') }}                      
                     <strong>Fim:</strong> {{ $evento->data_fim->format('d/m/Y') }}                  
                 </p>               
             </div>

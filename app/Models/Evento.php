@@ -19,7 +19,7 @@ class Evento extends Model
     protected $casts = [
         'data_inicio' => 'date',
         'data_fim' => 'date',
-        ];
+    ];
 
     public function atividades()
     {

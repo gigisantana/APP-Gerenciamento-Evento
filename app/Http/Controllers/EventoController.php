@@ -71,9 +71,10 @@ class EventoController extends Controller
      */
     public function show($id)
     {
-        $evento = Evento::findOrFail($id);
+        $evento = Evento::with('atividades.local')->findOrFail($id);
         $userId = Auth::id();
         $userRole = Registro::userRoleEvento($userId, $evento->id);
+        //dd($evento->atividades);
 
         return view('evento.show', compact('evento', 'userRole'));
     }

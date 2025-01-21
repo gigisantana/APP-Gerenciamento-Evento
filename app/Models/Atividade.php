@@ -15,13 +15,14 @@ class Atividade extends Model
         'data',
         'hora_inicio',
         'hora_fim',
+        'local_id',
         'evento_id',
     ];
 
     protected $casts = [
         'data' => 'date',
-        'hora_inicio' => 'datetime:H:i:s',
-        'hora_fim' => 'datetime:H:i:s',
+        'hora_inicio' => 'datetime:H:i',
+        'hora_fim' => 'datetime:H:i',
     ];
 
     public function evento()
@@ -32,5 +33,14 @@ class Atividade extends Model
     public function registro()
     {
         return $this->hasMany(Registro::class);
+    }
+
+    public function local()
+    {
+        return $this->belongsTo(Locais::class, 'local_id');
+    }
+    public function categorias()
+    {
+        return $this->belongsTo(Categoria::class);
     }
 }
