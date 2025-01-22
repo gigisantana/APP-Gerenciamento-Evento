@@ -48,30 +48,38 @@ class Evento extends Model
         $today = today();
         $dataEvento = $this->data_inicio;
         $dataFim = $this->data_fim;
+        $diasRestantes = $today->diffInDays($dataEvento, false);
 
-        if (!$dataEvento) {
+        if (!$dataEvento || $diasRestantes >= 30) {
+            // Status: Próximo (sem data definida ou daqui a mais de 30 dias)
             return [
                 'status' => 'Futuro',
-                'diasRestantes' => null
+                'diasRestantes' => $diasRestantes >= 30 ? $diasRestantes : null
             ];
-        } elseif ($dataEvento < $today) {
+        } else if ($dataEvento < $today && $dataFim < $today) {
+            // Status: Encerrado
             return [
                 'status' => 'Encerrado',
                 'diasRestantes' => 0
             ];
+        } else if ($dataEvento->diffInDays($today, false) == 1) {
+            // Status: Falta 1 dia
+            return [
+                'status' => 'Falta 1 dia!',
+                'diasRestantes' => 1
+            ];
+        } else if ($dataEvento <= $today && $dataFim >= $today) {
+            // Status: Acontecendo
+            return [
+                'status' => 'Acontecendo!!',
+                'diasRestantes' => 0
+            ];
         } else {
-            $diasRestantes = $today->diffInDays($dataEvento, false);
-            if ($diasRestantes <= 30) {
-                return [
-                    'status' => 'Próximo',
-                    'diasRestantes' => $diasRestantes
-                ];
-            } else {
-                return [
-                    'status' => 'Futuro',
-                    'diasRestantes' => $diasRestantes
-                ];
-            }
+            // Status: Próximo (casos restantes)
+            return [
+                'status' => 'Próximo',
+                'diasRestantes' => $diasRestantes
+            ];
         }
     }
 

@@ -79,7 +79,7 @@ class ProfileController extends Controller
             return view('profile.inscricoes', compact('inscricoes'));       
     }
     
-    public function gerenciar()
+    public function gerenciar(Request $request)
     {
         $user = auth()->id();
         $roles = [
@@ -87,41 +87,91 @@ class ProfileController extends Controller
             'coordenador' => 1,
         ];
 
-        // lista os ID dos eventos em que o usuário é coordenador, pra evitar duplicação no painel de gerenciamento
+        // Receber o status da requisição, com o valor padrão sendo 'todos'
+        $statusFiltro = $request->input('status', 'todos');
+
+        // Lista os IDs dos eventos em que o usuário é coordenador
         $coordenadorEventosId = Registro::where('user_id', $user)
-        ->where('role_id', $roles['coordenador'])
-        ->pluck('evento_id');
-    
-        $vinculosOrganizador = Registro::with('evento', 'atividade')
+            ->where('role_id', $roles['coordenador'])
+            ->pluck('evento_id');
+
+        // Consulta base para organizadores
+        $vinculosOrganizadorQuery = Registro::with('evento')
             ->where('user_id', $user)
             ->where('role_id', $roles['organizador'])
-            ->whereNotIn('evento_id', $coordenadorEventosId) // vai excluir os eventos que já estão na lista
-            ->get()
-            ->map(function ($vinculosOrganizador){
-                $evento = $vinculosOrganizador->evento;
-    
-                    if ($evento) {
-                        $statusData = $evento->status();
-                        $evento->status = $statusData['status'];
-                        $evento->diasRestantes = $statusData['diasRestantes'];
-                    }
-                    return $vinculosOrganizador;
-                });
-    
-        $vinculosCoordenador = Registro::with('evento', 'atividade')
+            ->whereNotIn('evento_id', $coordenadorEventosId);
+
+        // Consulta base para coordenadores
+        $vinculosCoordenadorQuery = Registro::with('evento')
             ->where('user_id', $user)
-            ->where('role_id', $roles['coordenador'])
-            ->get()
-            ->map(function ($vinculosCoordenador){
-                $evento = $vinculosCoordenador->evento;
-    
-                    if ($evento) {
-                        $statusData = $evento->status();
-                        $evento->status = $statusData['status'];
-                        $evento->diasRestantes = $statusData['diasRestantes'];
-                    }
-                    return $vinculosCoordenador;
+            ->where('role_id', $roles['coordenador']);
+
+        // Aplicar filtro de status, se necessário
+        $applyStatusFilter = function ($query) use ($statusFiltro) {
+            if ($statusFiltro !== 'todos') {
+                $query->whereHas('evento', function ($subQuery) use ($statusFiltro) {
+                    $subQuery->where(function ($statusQuery) use ($statusFiltro) {
+                        switch ($statusFiltro) {
+                            case 'proximo':
+                                $statusQuery->where('data_inicio', '>', today())
+                                    ->where('data_inicio', '<=', today()->addDays(30));
+                                break;
+                            case 'acontecendo':
+                                $statusQuery->whereDate('data_inicio', '<=', today())
+                                    ->whereDate('data_fim', '>=', today());
+                                break;
+                            case 'encerrado':
+                                $statusQuery->where('data_fim', '<', today());
+                                break;
+                            case 'futuro':
+                                $statusQuery->where(function ($futureQuery) {
+                                    $futureQuery->where('data_inicio', '>', today()->addDays(30))
+                                        ->orWhereNull('data_inicio');
+                                });
+                                break;
+                            case 'falta_1_dia':
+                                $statusQuery->whereDate('data_inicio', '=', today()->addDay());
+                                break;
+                        }
+                    });
                 });
-            return view('profile.gerenciamento', compact('vinculosOrganizador', 'vinculosCoordenador'));       
+            }
+        };
+
+        $applyStatusFilter($vinculosOrganizadorQuery);
+        $applyStatusFilter($vinculosCoordenadorQuery);
+
+        // Obter registros de organizadores agrupados por evento
+        $vinculosOrganizador = $vinculosOrganizadorQuery->get()
+            ->groupBy('evento_id')
+            ->map(function ($registros) {
+                $evento = $registros->first()->evento;
+                if ($evento) {
+                    $statusData = $evento->status();
+                    $evento->status = $statusData['status'];
+                    $evento->diasRestantes = $statusData['diasRestantes'];
+                }
+                return $evento;
+            });
+
+        // Obter registros de coordenadores agrupados por evento
+        $vinculosCoordenador = $vinculosCoordenadorQuery->get()
+            ->groupBy('evento_id')
+            ->map(function ($registros) {
+                $evento = $registros->first()->evento;
+                if ($evento) {
+                    $statusData = $evento->status();
+                    $evento->status = $statusData['status'];
+                    $evento->diasRestantes = $statusData['diasRestantes'];
+                }
+                return $evento;
+            });
+
+        // Retornar a view com os dados filtrados
+        return view('profile.gerenciamento', [
+            'vinculosOrganizador' => $vinculosOrganizador,
+            'vinculosCoordenador' => $vinculosCoordenador,
+            'statusFiltro' => $statusFiltro,
+        ]);
     }
 }

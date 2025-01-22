@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class EventoController extends Controller
 {
-    public function index() 
+    public function index(Request $request) 
     {
         $evento = Evento::all();
         return view('evento.index', compact('evento'));
@@ -28,9 +28,6 @@ class EventoController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -66,9 +63,6 @@ class EventoController extends Controller
             return redirect()->route('evento.show', $evento->id)->with('message', 'Evento criado com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $evento = Evento::with([
@@ -85,18 +79,12 @@ class EventoController extends Controller
         return view('evento.show', compact('evento', 'userRole'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $evento = Evento::findOrFail($id);
         return view('evento.edit', compact('evento'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $evento = Evento::findOrFail($id);
@@ -125,9 +113,6 @@ class EventoController extends Controller
             return redirect()->route('evento.show', $evento->id)->with('message', 'Evento atualizado com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $evento = Evento::findOrFail($id);
@@ -153,6 +138,6 @@ class EventoController extends Controller
         ->orderBy('data_inicio', 'asc')
         ->get();
 
-    return view('home', compact('eventosProximos'));
+        return view('home', compact('eventosProximos'));
     }
 }
