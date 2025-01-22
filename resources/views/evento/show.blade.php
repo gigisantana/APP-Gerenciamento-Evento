@@ -46,6 +46,14 @@
             <p class="mt-4">
                 <strong>Data:</strong> {{ $evento->data_inicio->format('d/m/Y') }} - {{ $evento->data_fim->format('d/m/Y') }}
             </p>
+            <p class="text-sm">
+                <strong>Coordenador:</strong>
+                @if($evento->coordenador && $evento->coordenador->user)
+                    {{ $evento->coordenador->user->nome }} {{ $evento->coordenador->user->sobrenome }}
+                @else
+                    Não definido
+                @endif
+            </p>
         </div>
 
         <div>
@@ -80,6 +88,15 @@
                                 @else
                                     Não definido
                                 @endif
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <strong>Organizadores:</strong>
+                                @foreach ($atividade->organizadores as $organizador)
+                                    <span>{{ $organizador->user->nome }} {{ $organizador->user->sobrenome }}</span>
+                                    @if (!$loop->last)
+                                    · 
+                                    @endif
+                                @endforeach
                             </p>
                             <div class="flex justify-center items-center">
                             @auth

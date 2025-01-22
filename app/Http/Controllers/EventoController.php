@@ -63,7 +63,7 @@ class EventoController extends Controller
                 'atividade_id' => null,
             ]);
 
-            return redirect()->route('evento.show', $evento->id)->with('success', 'Evento criado com sucesso!');
+            return redirect()->route('evento.show', $evento->id)->with('message', 'Evento criado com sucesso!');
     }
 
     /**
@@ -71,10 +71,16 @@ class EventoController extends Controller
      */
     public function show($id)
     {
-        $evento = Evento::with('atividades.local')->findOrFail($id);
+        $evento = Evento::with([
+            'atividades.local',
+            'coordenador.user', // Coordenador com dados do usuário
+            'atividades.organizadores.user' // Responsáveis com dados do usuário
+        ])->findOrFail($id);
         $userId = Auth::id();
         $userRole = Registro::userRoleEvento($userId, $evento->id);
         //dd($evento->atividades);
+        //dd($evento);
+        //dd($evento->coordenador);
 
         return view('evento.show', compact('evento', 'userRole'));
     }
@@ -116,7 +122,7 @@ class EventoController extends Controller
             }
             $evento->save();
 
-            return redirect()->route('evento.show', $evento->id)->with('success', 'Evento atualizado com sucesso!');
+            return redirect()->route('evento.show', $evento->id)->with('message', 'Evento atualizado com sucesso!');
     }
 
     /**
@@ -127,7 +133,7 @@ class EventoController extends Controller
         $evento = Evento::findOrFail($id);
 
         $evento->delete();
-        return redirect()->route('home')->with('success', 'Evento excluído com sucesso!');
+        return redirect()->route('home')->with('message', 'Evento excluído com sucesso!');
     }
 
     public function report() 

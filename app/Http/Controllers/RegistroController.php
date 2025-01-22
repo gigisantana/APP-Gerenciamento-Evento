@@ -57,7 +57,7 @@ class RegistroController extends Controller
                 'atividade_id' => null,
             ]);
         }
-        return redirect()->route('evento.edit', $id)->with('success', 'Organizador vinculado com sucesso!');
+        return redirect()->route('evento.show', $id)->with('message', 'Organizador vinculado com sucesso!');
     }
 
 }

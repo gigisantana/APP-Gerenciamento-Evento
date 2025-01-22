@@ -81,7 +81,7 @@ class AtividadeController extends Controller
         ]);
 
         return redirect()->route('evento.show', ['id' => $evento->id])
-                        ->with('success', 'Atividade criada com sucesso!');
+                        ->with('message', 'Atividade criada com sucesso!');
     }
     
     public function show($eventoId, $id)
@@ -98,7 +98,7 @@ class AtividadeController extends Controller
     {
         $atividade = Atividade::where('id', $atividade_id)
             ->where('evento_id', $id)
-            ->with('locais')
+            ->with('local')
             ->first();
         $locais = Locais::all();
 
@@ -196,7 +196,7 @@ class AtividadeController extends Controller
         //dd($atividade);
         $atividade->save();
         return redirect()->route('atividade.edit', ['id' => $id, 'atividade_id' => $atividade_id])
-        ->with('success', 'Atividade atualizada com sucesso!');
+        ->with('message', 'Atividade atualizada com sucesso!');
     }
 
     public function destroy($id, $atividade_id)
@@ -206,7 +206,7 @@ class AtividadeController extends Controller
 
         $atividade->delete();
         return redirect()->route('evento.show', $evento->id)
-        ->with('success', 'Atividade deletada com sucesso!');
+        ->with('message', 'Atividade deletada com sucesso!');
     }
 
     public function report() 

@@ -43,4 +43,11 @@ class Atividade extends Model
     {
         return $this->belongsTo(Categoria::class);
     }
+
+    public function organizadores()
+    {
+        return $this->hasMany(Registro::class, 'atividade_id', 'id')
+                ->where('role_id', 2)
+                ->with('user');
+    }
 }

@@ -46,67 +46,52 @@
                     <x-input-error :messages="$errors->get('descricao')" class="mt-2" />
                 </div>
 
-                <div class="m-4 flex justify-center items-center">
-                    <button type="submit" class="bg-lime-500 text-white text-lg px-4 py-2 rounded-md hover:bg-lime-600">Criar Atividade</button>
-                </div>
-
-                <!-- Bloco Select -->
-                <div class="form-group">
-                    <x-input-label for="bloco" value="Bloco:" />
-                    <select name="bloco" id="bloco" class="form-control" required>
-                        <option value="">Selecione o bloco</option>
-                        @foreach ($locais->unique('bloco') as $local)
-                            <option value="{{ $local->bloco }}" {{ old('bloco', $atividade->local->bloco) === $local->bloco ? 'selected' : '' }}>{{ $local->bloco }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Espaço Select -->
-                <div class="form-group">
-                    <x-input-label for="local_id" value="Espaço:" />
-                    <select name="local_id" id="espaco" class="form-control" required>
-                        <option value="">Selecione o espaço</option>
-                    </select>
-                </div>
-                
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const blocoSelect = document.getElementById('bloco');
-                        const espacoSelect = document.getElementById('espaco');
-                        
-                        // Variável que contém todos os locais com blocos e espaços
-                        const locais = @json($locais);
-                        
-                        // Função para carregar espaços
-                        function carregarEspacos(blocoSelecionado) {
-                            espacoSelect.innerHTML = '<option value="">Selecione o espaço</option>';
+                <div class="flex">
+                    <div class="m-4">
+                        <x-input-label for="bloco" value="Bloco:" />
+                        <select name="bloco" id="bloco" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm" required>
+                            <option value="">Selecione o bloco</option>
+                            @foreach ($locais->unique('bloco') as $local)
+                                <option value="{{ $local->bloco }}">{{ $local->bloco }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="m-4">
+                        <x-input-label for="local_id" value="Espaço:" />
+                        <select name="local_id" id="espaco" class="border-lime-300 focus:border-lime-500 focus:ring-lime-500 rounded-md shadow-sm" required>
+                            <option value="">Selecione o espaço</option>
+                        </select>
+                    </div>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const blocoSelect = document.getElementById('bloco');
+                            const espacoSelect = document.getElementById('espaco');
+                            const locais = @json($locais);
                             
-                            const espacosFiltrados = locais.filter(local => local.bloco === blocoSelecionado);
-                            
-                            espacosFiltrados.forEach(local => {
-                                const option = document.createElement('option');
-                                option.value = local.bloco + '-' + local.espaco;
-                                option.textContent = local.espaco;
-                                espacoSelect.appendChild(option);
+                            function carregarEspacos(blocoSelecionado) {
+                                espacoSelect.innerHTML = '<option value="">Selecione o espaço</option>';
+                                
+                                const espacosFiltrados = locais.filter(local => local.bloco === blocoSelecionado);
+                                
+                                espacosFiltrados.forEach(local => {
+                                    const option = document.createElement('option');
+                                    option.value = local.bloco + '-' + local.espaco;
+                                    option.textContent = local.espaco;
+                                    espacoSelect.appendChild(option);
+                                });
+                            }
+                            // Carrega os espaços ao selecionar um bloco
+                            blocoSelect.addEventListener('change', function () {
+                                carregarEspacos(this.value);
                             });
-                        }
-
-                        // Carrega os espaços ao selecionar um bloco
-                        blocoSelect.addEventListener('change', function () {
-                            carregarEspacos(this.value);
                         });
+                    </script>
+                </div>
 
-                        // Carrega os espaços do bloco já selecionado ao carregar a página
-                        carregarEspacos('{{ old('bloco', $atividade->local->bloco) }}');
-
-                        // Preenche o select de espaço com o valor do local_id
-                        const selectedLocalId = '{{ old('local_id', $atividade->local->bloco . '-' . $atividade->local->espaco) }}';
-                        if (selectedLocalId) {
-                            espacoSelect.value = selectedLocalId;
-                        }
-                    });
-                </script>
+                <div class=" flex justify-center items-center">
+                    <button type="submit" class="bg-lime-500 text-white text-lg px-4 py-2 rounded-md hover:bg-lime-600">Criar Atividade</button>
+                </div>                
             </form>
         </div>
         <div class="flex flex-col px-4 basis-2/4 justify-top">
@@ -119,17 +104,17 @@
                 </p>               
             </div>
 
-            <div class="m-6 self-start ml-8">
+            <div class="flex flex-col justify-start m-6 self-start ml-8 w-full">
                 <h1 class="text-2xl font-medium text-lime-700">Vincular Organizador</h2>
                 <form action="{{ route('registro.vincular', $evento->id) }}" method="POST">
                     @csrf
-    
-                    <div class="form-group">
-                        <label for="email">Email do Organizador</label>
-                        <input type="email" class="form-control" id="email" name="email" required placeholder="Digite o email do organizador"/>
+                    <div class="mx-3 my-4 justify-start items-center space-x-3">
+                        <x-input-label for="email" class="mx-3" value="Email do organizador: "/>
+                        <x-text-input type="email" id="email" class="w-1/2 placeholder:text-sm placeholder:text-gray-400" name="email" required placeholder="Digite o email do organizador"/>
                     </div>
-    
-                    <button type="submit" class="btn btn-success mt-2">Vincular Organizador</button>
+                    <div class="mx-10 my-6">
+                        <button type="submit" class="bg-lime-500 text-white text-md px-2 py-2 rounded-md hover:bg-lime-600">Vincular Organizador</button>
+                    </div>
                 </form>
             </div>
         </div>

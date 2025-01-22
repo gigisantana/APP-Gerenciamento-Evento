@@ -33,8 +33,8 @@ class Evento extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'permissions')
-                    ->withPivot('role_id') // Inclui o papel do usuário no evento
+        return $this->hasManyThrough(User::class, Registro::class, 'evento_id', 'id', 'id', 'user_id')
+                    ->withPivot('role_id')
                     ->withTimestamps();
     }
 
@@ -82,5 +82,12 @@ class Evento extends Model
         ->first();
 
         return $registro ? $registro->role_id : null;
+    }
+
+    public function coordenador()
+    {
+        return $this->hasOne(Registro::class, 'evento_id', 'id')
+                    ->where('role_id', 1) // Supondo que 1 seja o papel de coordenador
+                    ->with('user');
     }
 }
