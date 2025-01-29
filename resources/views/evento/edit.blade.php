@@ -3,16 +3,19 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h1 class="text-2xl font-semibold mb-4 text-lime-700">Editar Evento</h1>
         @if ($errors->any())
-        <div class="alert alert-danger">
+        <div class="alert alert-danger ">
             <strong>Ocorreu um erro:</strong>
             <ul>
                 @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+                <li class="text-red-700">{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
         @endif
         <div class="flex ">
+            <a href="{{ route('evento.show', $evento->id) }}" class="text-lime-600 hover:underline">
+                ← Voltar para página do evento
+            </a>
             <div class="basis-1/2 p-4">               
                 <!-- Formulário para editar o evento -->
                 <div class="">

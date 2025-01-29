@@ -1,10 +1,49 @@
 @extends('layouts.divider')
 @section('content')
     <div class="container mx-auto px-4">
+        <a href="{{ route('home') }}" class="text-lime-600 hover:underline">
+            ← Voltar para página de eventos
+        </a>
+        @if ($errors->any())
+            <div class="alert alert-danger bg-red-300 justify-center text-center text-red-900 px-4 py-1.5 my-4 mr-2 rounded-md">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <!-- Cabeçalho do Evento -->
         <div class="flex justify-between">
             @if($userRole === 1) {{-- Coordenador --}}
                 <div class="">
+                    <button class="bg-lime-500 hover:bg-lime-600 justify-center text-center text-white px-4 py-1.5 my-4 mr-2 rounded-md" 
+                    onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'vincular-event-modal-{{ $evento->id }}' }))">
+                        Vincular Organizador
+                    </button>
+                    <x-modal name="vincular-event-modal-{{ $evento->id }}" maxWidth="md">
+                        <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+                            <h1 class="text-2xl font-medium text-lime-700">Vincular Organizador</h1>
+                            <form action="{{ route('registro.vincular', $evento->id) }}" method="POST">
+                                @csrf
+                                <div class="my-4">
+                                    <x-input-label for="email" class="block mb-1" value="Email do organizador:" />
+                                    <x-text-input type="email" id="email" name="email" required 
+                                        class="w-full border border-gray-300 rounded-md p-2 placeholder:text-sm placeholder:text-gray-400"
+                                        placeholder="Digite o email do organizador"/>
+                                </div>
+                
+                                <div class="flex justify-between mt-4">
+                                    <x-secondary-button x-on:click="$dispatch('close-modal', 'delete-event-modal-{{ $evento->id }}')">
+                                        Cancelar
+                                    </x-secondary-button>
+                                    <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded-md hover:bg-lime-600">
+                                        Vincular
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </x-modal>             
                     <a href="{{ route('evento.edit', ['id' => $evento->id]) }}" class="justify-center bg-lime-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-lime-600">
                         Editar Evento
                     </a>
@@ -12,30 +51,30 @@
                         onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'delete-event-modal-{{ $evento->id }}' }))">
                         Excluir Evento
                     </button>
-                        <x-modal name="delete-event-modal-{{ $evento->id }}" maxWidth="md">
-                            <div class="p-6">
-                                <h2 class="text-lg font-medium text-gray-900">
-                                    Tem certeza de que deseja excluir este evento?
-                                </h2>
-                    
-                                <p class="mt-1 text-sm text-gray-600">
-                                    Esta ação é irreversível e resultará na exclusão permanente do evento.
-                                </p>
-                    
-                                <div class="mt-6 flex justify-end space-x-4">
-                                    <x-secondary-button x-on:click="$dispatch('close-modal', 'delete-event-modal-{{ $evento->id }}')">
-                                        Cancelar
-                                    </x-secondary-button>
-                                    <form method="POST" action="{{ route('evento.destroy', $evento->id) }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <x-danger-button>
-                                            Confirmar Exclusão
-                                        </x-danger-button>
-                                    </form>
-                                </div>
+                    <x-modal name="delete-event-modal-{{ $evento->id }}" maxWidth="md">
+                        <div class="p-6">
+                            <h2 class="text-lg font-medium text-gray-900">
+                                Tem certeza de que deseja excluir este evento?
+                            </h2>
+                
+                            <p class="mt-1 text-sm text-gray-600">
+                                Esta ação é irreversível e resultará na exclusão permanente do evento.
+                            </p>
+                
+                            <div class="mt-6 flex justify-end space-x-4">
+                                <x-secondary-button x-on:click="$dispatch('close-modal', 'delete-event-modal-{{ $evento->id }}')">
+                                    Cancelar
+                                </x-secondary-button>
+                                <form method="POST" action="{{ route('evento.destroy', $evento->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-danger-button>
+                                        Confirmar Exclusão
+                                    </x-danger-button>
+                                </form>
                             </div>
-                        </x-modal>              
+                        </div>
+                    </x-modal>
                 </div>
             @endif    
         </div>

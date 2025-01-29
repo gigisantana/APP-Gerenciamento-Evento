@@ -3,7 +3,7 @@
     <div class="mx-auto px-2 sm:px-6 lg:px-8 py-4 flex m-2 justify-around">
         <div class="px-4 basis-2/4">
             @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger bg-red-300 justify-center text-center text-red-900 px-4 py-1.5 my-4 mr-2 rounded-md">
                 <strong>Ocorreu um erro:</strong>
                 <ul>
                     @foreach ($errors->all() as $error)

@@ -52,7 +52,7 @@ return [
     'email'                => 'O campo :attribute deve ser um endereço de e-mail válido.',
     'ends_with'            => 'O campo :attribute deve terminar com um dos seguintes: :values',
     'enum'                 => 'O :attribute selecionado é inválido.',
-    'exists'               => 'O campo :attribute selecionado é inválido.',
+    'exists'               => 'O :attribute selecionado não existe.',
     'extensions'           => 'O campo :attribute deve conter uma das seguintes extensões: :values.',
     'file'                 => 'O campo :attribute deve ser um arquivo.',
     'filled'               => 'O campo :attribute deve ter um valor.',
