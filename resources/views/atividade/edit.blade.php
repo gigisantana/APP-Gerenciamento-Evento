@@ -1,11 +1,13 @@
 @extends('layouts.app')
 @section('content')
-    <div class="mx-auto px-2 sm:px-6 lg:px-8 py-4 flex m-2 justify-around">
+    <div class="ml-4 mt-4">
+        <a href="{{ route('evento.show', $evento->id) }}" class="text-lime-600 hover:underline">
+            ← Voltar para página do evento
+        </a>
+    </div>
+    <div class="mx-auto px-2 sm:px-6 lg:px-8 flex m-2 justify-around">
         <!-- Formulário para editar a atividade -->
         <div class="px-4 basis-2/4">
-            <a href="{{ route('evento.show', $evento->id) }}" class="text-lime-600 hover:underline">
-                ← Voltar para página do evento
-            </a>
             @if ($errors->any())
             <div class="alert alert-danger ">
                 <strong>Ocorreu um erro:</strong>
@@ -16,12 +18,12 @@
                 </ul>
             </div>
             @endif
+            <h1 class="text-2xl font-semibold mb-4 text-lime-700">Editar Atividade</h1>
                         
             <form action="{{ route('atividade.update', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" method="POST">
                 @csrf
                 @method('PATCH')
                 
-                <h1 class="text-2xl font-semibold mb-4 text-lime-700">Editar Atividade</h1>
                 
                 <div class="m-4">
                     <x-input-label for="nome" value="Nome da atividade:"/>

@@ -17,53 +17,53 @@
                   data-tooltip="Restaurante"/>
             </g>
             <g id="didatico">
-                  <rect id="Didatico" x="232.183" y="46.24" width="168.38" height="288.793" rx="10" fill="#FF4040" x-data="{ isHovered: false }" 
+                  <rect id="Bloco Didático" x="232.183" y="46.24" width="168.38" height="288.793" rx="10" fill="#FF4040" x-data="{ isHovered: false }" 
                   :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '316.373px 190.6365px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"
                   data-tooltip="Bloco Didático"/>
             </g>
             <g id="esportes">
-                  <rect id="Esportes" x="896.79" y="108.78" width="148.99" height="208.49" rx="10" fill="#F7FF15" x-data="{ isHovered: false }" 
+                  <rect id="Bloco de Esportes" x="896.79" y="108.78" width="148.99" height="208.49" rx="10" fill="#F7FF15" x-data="{ isHovered: false }" 
                   :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '971.285px 213.025px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"
                   data-tooltip="Bloco de Esportes"/>
             </g>
             <g id="laboratorios">
-                  <rect id="Laboratorios" x="575" y="928" width="286.422" height="119.885" rx="10" fill="#37F8FF" x-data="{ isHovered: false }" 
+                  <rect id="Bloco de Laboratórios" x="575" y="928" width="286.422" height="119.885" rx="10" fill="#37F8FF" x-data="{ isHovered: false }" 
                   :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '718.211px 987.9425px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"
                   data-tooltip="Bloco de Laboratórios"/>
             </g>
             <g id="administrativo">
-                  <rect id="Administrativo" x="669.723" y="582.178" width="224.294" height="266.411" rx="10" fill="#8906FB" x-data="{ isHovered: false }" 
+                  <rect id="Bloco Administrativo" x="669.723" y="582.178" width="224.294" height="266.411" rx="10" fill="#8906FB" x-data="{ isHovered: false }" 
                   :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '781.87px 715.3835px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"
                   data-tooltip="Bloco Administrativo"/>
             </g>
             <g id="bloco-central">
-                  <path id="Central1" d="M391.895 527.447C395.383 523.244 401.598 522.617 405.855 526.038L441.965 555.058C446.363 558.592 446.968 565.062 443.302 569.35L408.545 610.011L375.356 657.089C374.938 657.682 374.586 658.318 374.306 658.988L358.752 696.123C357.195 699.841 353.559 702.26 349.528 702.26H322.909H306.916C300.377 702.26 295.597 696.087 297.235 689.756L311.016 636.481C311.306 635.36 311.789 634.298 312.442 633.342L351.818 575.748L391.895 527.447Z" fill="#0DA117" x-data="{ isHovered: false }" 
+                  <path id="Bloco Central 1" d="M391.895 527.447C395.383 523.244 401.598 522.617 405.855 526.038L441.965 555.058C446.363 558.592 446.968 565.062 443.302 569.35L408.545 610.011L375.356 657.089C374.938 657.682 374.586 658.318 374.306 658.988L358.752 696.123C357.195 699.841 353.559 702.26 349.528 702.26H322.909H306.916C300.377 702.26 295.597 696.087 297.235 689.756L311.016 636.481C311.306 635.36 311.789 634.298 312.442 633.342L351.818 575.748L391.895 527.447Z" fill="#0DA117" x-data="{ isHovered: false }" 
                   :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '372px 611px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"
                   data-tooltip="Bloco Central 1"/>
 
-                  <path id="Central2" d="M240 715.482C240 709.959 244.477 705.482 250 705.482H326C331.523 705.482 336 709.959 336 715.482V798.973C336 804.495 331.523 808.973 326 808.973H250C244.477 808.973 240 804.495 240 798.973V715.482Z" fill="#0DA117" x-data="{ isHovered: false }" 
+                  <path id="Bloco Central 2" d="M240 715.482C240 709.959 244.477 705.482 250 705.482H326C331.523 705.482 336 709.959 336 715.482V798.973C336 804.495 331.523 808.973 326 808.973H250C244.477 808.973 240 804.495 240 798.973V715.482Z" fill="#0DA117" x-data="{ isHovered: false }" 
                   :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '288px 757.5px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"
                   data-tooltip="Bloco Central 2"/>
 
-                  <path id="Central3" d="M237.203 831.087C234.282 824.477 239.123 817.047 246.35 817.047H342.317C346.785 817.047 350.711 820.01 351.935 824.307L382.128 930.323C383.692 935.813 380.349 941.497 374.79 942.798L302.901 959.632C298.218 960.729 293.417 958.336 291.474 953.937L237.203 831.087Z" fill="#0DA117" x-data="{ isHovered: false }" 
+                  <path id="Bloco Central 3" d="M237.203 831.087C234.282 824.477 239.123 817.047 246.35 817.047H342.317C346.785 817.047 350.711 820.01 351.935 824.307L382.128 930.323C383.692 935.813 380.349 941.497 374.79 942.798L302.901 959.632C298.218 960.729 293.417 958.336 291.474 953.937L237.203 831.087Z" fill="#0DA117" x-data="{ isHovered: false }" 
                   :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '208px 889.5px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"
                   data-tooltip="Bloco Central 3"/>
 
-                  <path id="Central4" d="M363.437 844.63C362.033 839.921 364.257 834.891 368.685 832.761L432.047 802.279C432.574 802.026 433.078 801.726 433.554 801.384L518.903 739.947C519.855 739.261 520.68 738.413 521.339 737.441L569.18 666.841C572.104 662.525 577.853 661.18 582.388 663.75L647.42 700.595C652.555 703.505 654.067 710.205 650.678 715.037L597.584 790.75L574.358 818.62L533.35 856.542C532.962 856.901 532.545 857.229 532.105 857.523L490.095 885.51L402.028 932.192C396.452 935.148 389.565 932.263 387.762 926.214L363.437 844.63Z" fill="#0DA117" x-data="{ isHovered: false }" 
+                  <path id="Bloco Central 4" d="M363.437 844.63C362.033 839.921 364.257 834.891 368.685 832.761L432.047 802.279C432.574 802.026 433.078 801.726 433.554 801.384L518.903 739.947C519.855 739.261 520.68 738.413 521.339 737.441L569.18 666.841C572.104 662.525 577.853 661.18 582.388 663.75L647.42 700.595C652.555 703.505 654.067 710.205 650.678 715.037L597.584 790.75L574.358 818.62L533.35 856.542C532.962 856.901 532.545 857.229 532.105 857.523L490.095 885.51L402.028 932.192C396.452 935.148 389.565 932.263 387.762 926.214L363.437 844.63Z" fill="#0DA117" x-data="{ isHovered: false }" 
                   :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '509px 798.5px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"

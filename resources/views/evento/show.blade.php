@@ -1,5 +1,34 @@
 @extends('layouts.divider')
 @section('content')
+<style>
+    .bloco-didático {
+        border-color: #FF4040;
+        box-shadow: 10px 10px 10px #FF4040;
+    }
+
+    .bloco-administrativo {
+        border-color: #8906FB;
+        box-shadow: 10px 10px 10px #8906FB;
+    }
+
+    .bloco-de-laboratórios {
+        border-color: #37F8FF;
+        box-shadow: 10px 10px 10px #37F8FF;
+    }
+
+    .bloco-de-esportes {
+        border-color: #F7FF15;
+        box-shadow: 10px 10px 10px #F7FF15;
+    }
+    
+    .bloco-central-4 {
+        border-color: #0DA117;
+        box-shadow: 10px 10px 10px #0DA117;
+    }
+
+    
+</style>
+
     <div class="container mx-auto px-4">
         <a href="{{ route('home') }}" class="text-lime-600 hover:underline">
             ← Voltar para página de eventos
@@ -83,7 +112,16 @@
             <h1 class="text-3xl font-bold">{{ $evento->nome }}</h1>
             <p class="mt-2 text-lg">{{ $evento->descricao }}</p>
             <p class="mt-4">
-                <strong>Data:</strong> {{ $evento->data_inicio->format('d/m/Y') }} - {{ $evento->data_fim->format('d/m/Y') }}
+                <strong>Data:</strong> 
+                @if ($evento->data_inicio && $evento->data_fim)
+                    {{ $evento->data_inicio->format('d/m/Y') }} - {{ $evento->data_fim->format('d/m/Y') }}
+                @elseif ($evento->data_inicio)
+                    {{ $evento->data_inicio->format('d/m/Y') }} - Não definido
+                @elseif ($evento->data_fim)
+                    Não definido - {{ $evento->data_fim->format('d/m/Y') }}
+                @else
+                    Não definido
+                @endif
             </p>
             <p class="text-sm">
                 <strong>Coordenador:</strong>
@@ -111,23 +149,39 @@
             @if($evento->atividades->count())
                 <div class="flex flex-col gap-6">
                     @foreach ($evento->atividades as $atividade)
-                        <div class="border border-lime-200 rounded-md p-4 shadow-md">
+                        <div class="atividade border border-lime-200 rounded-md p-4 shadow-md transition-all duration-300" data-bloco="{{ $atividade->local ? $atividade->local->bloco : '' }}">
                             <h3 class="text-lg font-bold text-lime-700">{{ $atividade->nome }}</h3>
                             <p class="text-sm text-gray-600">{{ $atividade->descricao }}</p>
                             <p class="mt-2 text-sm text-gray-600">
-                                <strong>Data:</strong> {{ $atividade->data->format('d/m/Y') }}
-                            </p>
-                            <p class="text-sm text-gray-600">
-                                <strong>Horário:</strong> {{ $atividade->hora_inicio->format('H:i') }} - {{ $atividade->hora_fim->format('H:i') }}
-                            </p>
-                            <p class="text-sm text-gray-600">
-                                <strong>Local:</strong>
-                                @if($atividade->local)
-                                    {{ $atividade->local->espaco }} ({{ $atividade->local->bloco }})
+                                <strong>Data:</strong>
+                                @if ($atividade->data)
+                                    {{ $atividade->data->format('d/m/Y') }}
                                 @else
                                     Não definido
                                 @endif
                             </p>
+                            <p class="text-sm text-gray-600">
+                                <strong>Horário:</strong>
+                                @if ($atividade->hora_inicio && $atividade->hora_fim)
+                                    {{ $atividade->hora_inicio->format('H:i') }} - {{ $atividade->hora_fim->format('H:i') }}
+                                @elseif ($atividade->hora_inicio)
+                                    {{ $atividade->hora_inicio->format('H:i') }} - Não definido
+                                @elseif ($atividade->hora_fim)
+                                    Não definido - {{ $atividade->hora_fim->format('H:i') }}
+                                @else
+                                    Não definido
+                                @endif
+                            </p>
+                            <div class="">
+                                <p class="text-sm text-gray-600">
+                                    <strong>Local:</strong>
+                                    @if($atividade->local)
+                                        {{ $atividade->local->espaco }} ({{ $atividade->local->bloco }})
+                                    @else
+                                        Não definido
+                                    @endif
+                                </p>
+                            </div>
                             <p class="text-sm text-gray-600">
                                 <strong>Organizadores:</strong>
                                 @foreach ($atividade->organizadores as $organizador)
@@ -221,6 +275,34 @@
             @else
                 <p class="text-gray-500">Nenhuma atividade cadastrada para este evento.</p>
             @endif
+            
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const atividades = document.querySelectorAll('.atividade');
+            const elementos = document.querySelectorAll('[data-tooltip]');
+
+            // Adiciona os eventos para cada bloco do SVG
+            elementos.forEach(elemento => {
+                elemento.addEventListener('mouseenter', function (event) {
+                    const bloco = elemento.id;
+
+                    atividades.forEach(atividade => {
+                        if (atividade.dataset.bloco === bloco) { 
+                            atividade.classList.add(`${bloco.toLowerCase().replace(/\s+/g, '-')}`);
+                        }
+                    });
+                });
+
+                elemento.addEventListener('mouseleave', function () {
+                    atividades.forEach(atividade => {
+                        atividade.classList.remove(`${elemento.id.toLowerCase().replace(/\s+/g, '-')}`);
+                    });
+                });
+            });
+        });
+    </script>
+@endpush

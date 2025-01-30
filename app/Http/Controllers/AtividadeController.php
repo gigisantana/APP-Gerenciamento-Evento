@@ -40,7 +40,7 @@ class AtividadeController extends Controller
                 'nullable',
                 'date',
                 function ($attribute, $value, $fail) use ($evento) {
-                    if ($value >= $evento->data_inicio && $value <= $evento->data_fim ) {
+                    if ($value >= $evento->data_inicio || $value <= $evento->data_fim ) {
                         return true;
                     } else {
                         $fail("A data da atividade deve estar entre {$evento->data_inicio->format('d/m/Y')} e {$evento->data_fim->format('d/m/Y')}.");

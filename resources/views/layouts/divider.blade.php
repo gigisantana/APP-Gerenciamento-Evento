@@ -29,12 +29,29 @@
                 border-radius: 10px;
                 pointer-events: none;
             }
+
+            .scrollable-content::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .scrollable-content::-webkit-scrollbar-track {
+                background: #ecfccb;
+                border-radius: 10px;
+            }
+
+            .scrollable-content::-webkit-scrollbar-thumb {
+                background-color: #bef264;
+                border-radius: 10px;
+                border: 2px solid #f1f1f1;
+            }
+
+            .scrollable-content::-webkit-scrollbar-thumb:hover {
+                background-color: #84cc16;
+            }
         </style>
-
-
     </head>
-    <body class="font-sans antialiased bg-lime-500">
-        <div class="min-h-screen">
+    <body class="font-sans antialiased bg-lime-400">
+        <div class="">
             @include('layouts.navigation')
                 @if (session('message'))
                     <div class="bg-green-100 text-green-700 p-4 rounded-md shadow-md mb-6">
@@ -51,27 +68,28 @@
             @endif
 
             <!-- Page Content -->
-            <main class="mx-auto my-auto sm:px-6 lg:px-8 px-10 py-4">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="align-top flex flex-wrap divide-x-2 divide-dashed divide-lime-500">
-                        <div class="p-6 basis-2/5">                        
+            <main class="mx-auto my-auto sm:px-6 lg:px-8 px-10 py-4 overflow-hidden">
+                <div class="bg-white shadow-sm sm:rounded-lg overflow-hidden">
+                    <div class="align-top flex flex-wrap">
+                        <!-- Conteúdo com rolagem interna, sem ultrapassar o limite da tela -->
+                        <div class="p-6 basis-2/5 overflow-y-auto max-h-[calc(100vh-85px)] scrollable-content">                        
                             @yield('content')
                         </div>
-                        <div class="p-4 basis-3/5 px-8"> 
+            
+                        <!-- Mapa estático -->
+                        <div class="p-3 basis-3/5 px-8"> 
                             <h1 class="text-2xl font-bold text-lime-700 ">Mapa do Campus Paranaguá</h1>
+                            <p>Passe o mouse na imagem para mais detalhes!</p>
                             <div class="flex justify-center items-center">
                                 {!! file_get_contents(public_path('images/mapa-IFPR-2.svg')) !!}
                             </div>
-
-                            <!-- Tooltip -->
                             <div id="tooltip"></div>
 
                             <script>
                                 document.addEventListener('DOMContentLoaded', function () {
                                     const tooltip = document.getElementById('tooltip');
-                                    const elementos = document.querySelectorAll('[data-tooltip]'); // Elementos com atributo "data-tooltip"
+                                    const elementos = document.querySelectorAll('[data-tooltip]');
                             
-                                    // Adiciona os eventos para cada elemento
                                     elementos.forEach(elemento => {
                                         elemento.addEventListener('mouseenter', function (event) {
                                             tooltip.innerHTML = elemento.getAttribute('data-tooltip');
@@ -94,8 +112,8 @@
                         </div>
                     </div>
                 </div>
-                
             </main>
         </div>
+        @stack('scripts')
     </body>
 </html>
