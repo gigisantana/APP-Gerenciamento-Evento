@@ -32,13 +32,17 @@
             </g>
             <g id="laboratorios">
                   <rect id="Bloco de Laboratórios" x="575" y="928" width="286.422" height="119.885" rx="10" fill="#37F8FF" x-data="{ isHovered: false }" 
-                  :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '718.211px 987.9425px'}"
+                  :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', 
+                  transformOrigin: '718.211px 987.9425px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"
                   data-tooltip="Bloco de Laboratórios"/>
             </g>
             <g id="administrativo">
-                  <rect id="Bloco Administrativo" x="669.723" y="582.178" width="224.294" height="266.411" rx="10" fill="#8906FB" x-data="{ isHovered: false }" 
+                  <rect id="Bloco Administrativo" 
+                  x="669.723" y="582.178" 
+                  width="224.294" height="266.411" 
+                  rx="10" fill="#8906FB" x-data="{ isHovered: false }" 
                   :style="{transform: isHovered ? 'scale(1.1)' : 'scale(1)', transformOrigin: '781.87px 715.3835px'}"
                   @mouseenter="isHovered = true"
                   @mouseleave="isHovered = false"

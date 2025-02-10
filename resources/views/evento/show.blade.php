@@ -289,23 +289,51 @@
         document.addEventListener('DOMContentLoaded', function () {
             const atividades = document.querySelectorAll('.atividade');
             const elementos = document.querySelectorAll('[data-tooltip]');
+            let blocoSelecionado = null;
 
-            // Adiciona os eventos para cada bloco do SVG
             elementos.forEach(elemento => {
-                elemento.addEventListener('mouseenter', function (event) {
-                    const bloco = elemento.id;
+                const bloco = elemento.id.toLowerCase().replace(/\s+/g, '-');
 
-                    atividades.forEach(atividade => {
-                        if (atividade.dataset.bloco === bloco) { 
-                            atividade.classList.add(`${bloco.toLowerCase().replace(/\s+/g, '-')}`);
-                        }
-                    });
+                // Evento de hover para destaque
+                elemento.addEventListener('mouseenter', function () {
+                    if (!blocoSelecionado) {
+                        atividades.forEach(atividade => {
+                            if (atividade.dataset.bloco.toLowerCase().replace(/\s+/g, '-') === bloco) {
+                                atividade.classList.add(bloco);
+                            }
+                        });
+                    }
                 });
 
                 elemento.addEventListener('mouseleave', function () {
-                    atividades.forEach(atividade => {
-                        atividade.classList.remove(`${elemento.id.toLowerCase().replace(/\s+/g, '-')}`);
-                    });
+                    if (!blocoSelecionado) {
+                        atividades.forEach(atividade => {
+                            atividade.classList.remove(bloco);
+                        });
+                    }
+                });
+
+                // Evento de clique para filtrar atividades
+                elemento.addEventListener('click', function () {
+                    if (blocoSelecionado === bloco) {
+                        // Se o mesmo bloco for clicado novamente, remover a filtragem
+                        blocoSelecionado = null;
+                        atividades.forEach(atividade => {
+                            atividade.style.display = 'block';
+                            atividade.classList.remove(bloco);
+                        });
+                    } else {
+                        blocoSelecionado = bloco;
+                        atividades.forEach(atividade => {
+                            if (atividade.dataset.bloco.toLowerCase().replace(/\s+/g, '-') === bloco) {
+                                atividade.style.display = 'block';
+                                atividade.classList.add(bloco);
+                            } else {
+                                atividade.style.display = 'none';
+                                atividade.classList.remove(atividade.dataset.bloco.toLowerCase().replace(/\s+/g, '-'));
+                            }
+                        });
+                    }
                 });
             });
         });
