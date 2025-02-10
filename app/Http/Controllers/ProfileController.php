@@ -57,28 +57,67 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function inscricoes()
+    public function inscricoes(Request $request)
     {
         $user = auth()->id();
         $roleInscrito = 3;
+        $statusFiltro = $request->input('status', 'todos');
 
-        $inscricoes = Registro::with('evento', 'atividade')
+        // Busca todas as inscrições do usuário
+        $inscricoesQuery = Registro::with('evento')
             ->where('user_id', $user)
-            ->where('role_id', $roleInscrito)
-            ->get()
-            ->map(function ($inscricao){
-                $evento = $inscricao->evento;
+            ->where('role_id', $roleInscrito);
 
+        // Aplicar filtro de status nos eventos
+        $applyStatusFilter = function ($query) use ($statusFiltro) {
+            if ($statusFiltro !== 'todos') {
+                $query->whereHas('evento', function ($subQuery) use ($statusFiltro) {
+                    $subQuery->where(function ($statusQuery) use ($statusFiltro) {
+                        switch ($statusFiltro) {
+                            case 'proximo':
+                                $statusQuery->where('data_inicio', '>', today())
+                                    ->where('data_inicio', '<=', today()->addDays(30));
+                                break;
+                            case 'acontecendo':
+                                $statusQuery->whereDate('data_inicio', '<=', today())
+                                    ->whereDate('data_fim', '>=', today());
+                                break;
+                            case 'encerrado':
+                                $statusQuery->where('data_fim', '<', today());
+                                break;
+                            case 'futuro':
+                                $statusQuery->where(function ($futureQuery) {
+                                    $futureQuery->where('data_inicio', '>', today()->addDays(30))
+                                        ->orWhereNull('data_inicio');
+                                });
+                                break;
+                            case 'falta_1_dia':
+                                $statusQuery->whereDate('data_inicio', '=', today()->addDay());
+                                break;
+                        }
+                    });
+                });
+            }
+        };
+
+        $applyStatusFilter($inscricoesQuery);
+
+        // Obter inscrições agrupadas por evento
+        $inscricoes = $inscricoesQuery->get()
+            ->groupBy('evento_id')
+            ->map(function ($registros) {
+                $evento = $registros->first()->evento;
                 if ($evento) {
                     $statusData = $evento->status();
                     $evento->status = $statusData['status'];
                     $evento->diasRestantes = $statusData['diasRestantes'];
                 }
-                return $inscricao;
+                return $evento;
             });
-            return view('profile.inscricoes', compact('inscricoes'));       
+
+        return view('profile.inscricoes', compact('inscricoes', 'statusFiltro'));
     }
-    
+        
     public function gerenciar(Request $request)
     {
         $user = auth()->id();

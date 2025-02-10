@@ -72,14 +72,14 @@
                 <div class="bg-white shadow-sm sm:rounded-lg overflow-hidden">
                     <div class="align-top flex flex-wrap">
                         <!-- Conteúdo com rolagem interna, sem ultrapassar o limite da tela -->
-                        <div class="p-6 basis-2/5 overflow-y-auto max-h-[calc(100vh-85px)] scrollable-content">                        
+                        <div class="py-3 pl-4 basis-2/5 overflow-y-auto max-h-[calc(100vh-85px)] scrollable-content">                        
                             @yield('content')
                         </div>
             
                         <!-- Mapa estático -->
-                        <div class="p-3 basis-3/5 px-8"> 
-                            <h1 class="text-2xl font-bold text-lime-700 ">Mapa do Campus Paranaguá</h1>
-                            <p>Passe o mouse na imagem para mais detalhes!</p>
+                        <div class="py-3 basis-3/5 px-8"> 
+                            <h1 class="text-2xl font-bold text-lime-700">Mapa do Campus Paranaguá</h1>
+                            <p class="text-gray-500">Passe o mouse no mapa para mais detalhes!</p>
                             <div class="flex justify-center items-center">
                                 {!! file_get_contents(public_path('images/mapa-IFPR-2.svg')) !!}
                             </div>

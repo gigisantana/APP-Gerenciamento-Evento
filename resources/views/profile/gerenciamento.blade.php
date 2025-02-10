@@ -24,7 +24,7 @@
                 <p class="text-gray-600">Você ainda não é organizador de nenhum evento.</p>
             @else
                 <ul class="space-y-4">
-                    @forelse ($vinculosOrganizador as $evento)
+                    @forelse ($vinculosOrganizador->sortBy('data_inicio') as $evento)
                         <div onclick="window.location.href='{{ route('evento.show', ['id' => $evento->id]) }}'" 
                              class="cursor-pointer bg-white shadow-md rounded-lg hover:shadow-lg transition-shadow duration-300">
                             <li class="p-4 border rounded-lg">
@@ -76,18 +76,18 @@
                                     <div class="flex gap-5">
                                         <h2 class="text-xl font-bold text-lime-700">{{ $evento->nome }}</h2>
                                         <span class="px-3 py-1 rounded-full text-white
-                                        @if ($evento->status === 'Encerrado') bg-gray-500
-                                        @elseif ($evento->status === 'Próximo' || $evento->status === 'Falta 1 dia!') bg-orange-500
-                                        @elseif ($evento->status === 'Acontecendo!!') bg-yellow-500
-                                        @else bg-lime-500
-                                        @endif">
-                                        @if ($evento->status === 'Próximo' && $evento->diasRestantes == 1)
-                                            Falta 1 dia!
-                                        @elseif ($evento->status === 'Próximo')
-                                            Faltam {{ $evento->diasRestantes }} dias!
-                                        @else
-                                            {{ $evento->status }}
-                                        @endif
+                                            @if ($evento->status === 'Encerrado') bg-gray-500
+                                            @elseif ($evento->status === 'Próximo' || $evento->status === 'Falta 1 dia!') bg-orange-500
+                                            @elseif ($evento->status === 'Acontecendo!!') bg-yellow-500
+                                            @else bg-lime-500
+                                            @endif">
+                                            @if ($evento->status === 'Próximo' && $evento->diasRestantes == 1)
+                                                Falta 1 dia!
+                                            @elseif ($evento->status === 'Próximo')
+                                                Faltam {{ $evento->diasRestantes }} dias!
+                                            @else
+                                                {{ $evento->status }}
+                                            @endif
                                     </span>
                                     </div>
                                     <p>{{ $evento->descricao }}</p>

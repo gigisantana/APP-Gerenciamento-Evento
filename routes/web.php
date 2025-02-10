@@ -5,6 +5,7 @@ use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\LocalController;
+use App\Models\Registro;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
@@ -27,14 +28,14 @@ Route::middleware('auth', 'verified')->group(function(){
     Route::middleware(['verify.ifpr.email'])->group(function () {
         Route::prefix('eventos')->group(function () {
             Route::get('/criar', [EventoController::class, 'create'])->name('evento.create');
-            Route::post('/', [EventoController::class, 'store'])->name('evento.store');
             Route::get('/{id}/edit', [EventoController::class, 'edit'])->name('evento.edit');
-            Route::patch('/{id}', [EventoController::class, 'update'])->name('evento.update');
-            Route::delete('/{id}', [EventoController::class, 'destroy'])->name('evento.destroy');
             Route::post('/{id}/organizadores', [RegistroController::class, 'addOrganizador'])->name('registro.vincular');
         });
     });
 });
+Route::patch('/{id}', [EventoController::class, 'update'])->name('evento.update');
+Route::delete('/{id}', [EventoController::class, 'destroy'])->name('evento.destroy');
+Route::post('/', [EventoController::class, 'store'])->name('evento.store');
 
 // Gerencia atividade (precisa estar autenticado e vinculado ao evento)
 Route::middleware('auth', 'verified')->group(function(){
@@ -45,6 +46,9 @@ Route::middleware('auth', 'verified')->group(function(){
             Route::get('/{id}/atividades/{atividade_id}/edit', [AtividadeController::class, 'edit'])->name('atividade.edit');
             Route::patch('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'update'])->name('atividade.update');
             Route::delete('/{id}/atividades/{atividade_id}', [AtividadeController::class, 'destroy'])->name('atividade.destroy');
+            
+            Route::get('/{id}/atividades/{atividade_id}/inscritos', [RegistroController::class, 'inscritos'])->name('atividade.inscritos');
+            Route::get('/{id}/atividades/{atividade_id}/relatorio/pdf', [RegistroController::class, 'exportarPDF'])->name('relatorio.pdf');
         });
     });
 });

@@ -136,7 +136,7 @@
         <div>
             @if(($userRole === 1 || $userRole === 2)) {{-- Coordenador ou Organizador --}}
                 <div class="my-4">
-                    <a href="{{ route('atividade.create', ['id' => $evento->id]) }}" class=" justify-center bg-lime-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-lime-600">
+                    <a href="{{ route('atividade.create', ['id' => $evento->id]) }}" class="justify-center bg-lime-500 text-white text-center px-4 py-2 my-4 mr-2 rounded-md hover:bg-lime-600">
                         Criar Atividade
                     </a>
                 </div>
@@ -216,6 +216,11 @@
                                 @elseif($registro && ($userRole === 1 || $userRole === 2))
                                     <div class="flex ">
                                         @if(($userRole === 1 || $userRole === 2)) {{-- Coordenador ou Organizador --}}
+                                            <div class="my-3.5">
+                                                <a href="{{ route('atividade.inscritos', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class="justify-center bg-lime-500 hover:bg-lime-600 text-white text-center px-4 py-2 my-2 mr-2 rounded-md ">
+                                                    Ver Inscritos
+                                                </a>
+                                            </div>
                                             <div class="my-3.5">
                                                 <a href="{{ route('atividade.edit', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" class="justify-center bg-orange-500 hover:bg-orange-600 text-white text-center px-4 py-2 my-2 mr-2 rounded-md ">
                                                     Editar

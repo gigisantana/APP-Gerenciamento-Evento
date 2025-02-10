@@ -6,7 +6,6 @@
         </a>
     </div>
     <div class="mx-auto px-2 sm:px-6 lg:px-8 flex m-2 justify-around">
-        <!-- Formulário para editar a atividade -->
         <div class="px-4 basis-2/4">
             @if ($errors->any())
             <div class="alert alert-danger ">
@@ -23,8 +22,7 @@
             <form action="{{ route('atividade.update', ['id' => $evento->id, 'atividade_id' => $atividade->id]) }}" method="POST">
                 @csrf
                 @method('PATCH')
-                
-                
+                               
                 <div class="m-4">
                     <x-input-label for="nome" value="Nome da atividade:"/>
                     <x-text-input type="text" class="form-control" id="nome" name="nome" value="{{ old('nome', $atividade->nome) }}" required/>

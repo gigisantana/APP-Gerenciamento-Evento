@@ -9,6 +9,7 @@ use App\Models\Locais;
 use App\Models\Registro;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AtividadeController extends Controller
@@ -208,6 +209,8 @@ class AtividadeController extends Controller
         return redirect()->route('evento.show', $evento->id)
         ->with('message', 'Atividade deletada com sucesso!');
     }
+
+
 
     public function report() 
     {

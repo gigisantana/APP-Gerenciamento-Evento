@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Atividade;
+use App\Models\Evento;
 use App\Models\Registro;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RegistroController extends Controller
 {
@@ -60,4 +64,38 @@ class RegistroController extends Controller
         return redirect()->route('evento.show', $id)->with('message', 'Organizador vinculado com sucesso!');
     }
 
+    public function inscritos($id, $atividade_id)
+    {
+        $inscritos = Registro::where('atividade_id', $atividade_id)
+        ->with('user') // Carrega os dados do usuário
+        ->get();
+
+        $atividade = Atividade::with('evento')->findOrFail($atividade_id);
+
+    return view('atividade.inscritos', compact('inscritos', 'atividade'));
+    }
+
+    public function exportarPDF($id, $atividade_id)
+    {
+        $atividade = Atividade::with('evento')->findOrFail($atividade_id);
+
+    // Verifica se a atividade existe
+    if (!$atividade) {
+        return abort(404, 'Atividade não encontrada');
+    }
+
+    // Buscar todos os inscritos na atividade, incluindo dados do usuário
+    $inscritos = Registro::where('atividade_id', $atividade_id)
+        ->with('user')  // Carrega os dados do usuário
+        ->get();
+
+    // Gerar o PDF com a view e dados necessários
+    $pdf = Pdf::loadView('atividade.relatorio', compact('inscritos', 'atividade'));
+
+    // Nome do arquivo PDF com base no evento e atividade
+    $nomeArquivo = "relatorio_evento_{$atividade->evento->id}_atividade_{$atividade_id}.pdf";
+
+    // Baixar o PDF gerado
+    return $pdf->download($nomeArquivo);
+    }
 }
