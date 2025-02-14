@@ -291,11 +291,61 @@
             const elementos = document.querySelectorAll('[data-tooltip]');
             let blocoSelecionado = null;
 
+            // Criar tooltip para a imagem
+            const tooltip = document.createElement('div');
+            tooltip.id = 'tooltip';
+            tooltip.style.position = 'absolute';
+            tooltip.style.display = 'none';
+            tooltip.style.border = '1px solid black';
+            tooltip.style.background = 'black';
+            tooltip.style.padding = '5px';
+            tooltip.style.maxWidth = '200px';
+            tooltip.style.fontSize = '12px';
+
+            const tooltipImg = document.createElement('img');
+            tooltipImg.style.width = '150px';
+            tooltipImg.style.height = '100px';
+            tooltip.appendChild(tooltipImg);
+
+            // Criar a lista de salas
+            const listaSalas = document.createElement('ul');
+            listaSalas.style.listStyle = 'none';
+            listaSalas.style.padding = '0';
+            listaSalas.style.margin = '0';
+            listaSalas.style.fontSize = '11px';
+            tooltip.appendChild(listaSalas);
+
+            document.body.appendChild(tooltip);
+
+            // Mapeamento de blocos para imagens
+            const blocos = {
+                "bloco-didático": "{{ asset('images/didatico.jpg') }}",
+                "bloco-de-esportes": "{{ asset('images/esportes.jpg') }}",
+                "bloco-de-laboratórios": "{{ asset('images/laboratorio.jpg') }}",
+                "central1": "{{ asset('images/central1.jpg') }}",
+                "central2": "{{ asset('images/central2.jpg') }}",
+                "central3": "{{ asset('images/central3.jpg') }}",
+                "bloco-central-4": "{{ asset('images/central4.jpg') }}",
+                "administrativo": "{{ asset('images/administrativo.jpg') }}"
+            };
+
+            // Mapeamento de blocos para suas salas
+            const salas = {
+                "bloco-didático": ["Sala 10", "Sala 11", "Sala 12", "Lab. Informática 0", "Lab. Informática 1", "Lab. Informática 2", "Lab. Informática 3", "Lab. Informática 4", "Lab. Informática 5"],
+                "bloco-esportes": ["Quadra 1", "Quadra 2", "Vestiário Masculino", "Vestiário Feminino"],
+                "bloco-laboratórios": ["Lab Química", "Lab Física", "Lab Biologia"],
+                "bloco-central-1": ["Auditório", "Sala de Reunião", "Diretoria"],
+                "bloco-central-2": ["Biblioteca", "Sala de Estudos", "Computadores"],
+                "bloco-central-3": ["Sala dos Professores", "Secretaria"],
+                "bloco-central-4": ["-- 1º PISO --", "Mosaico", "Cozinha", "-- 2º PISO --", "Sala Profs. de Matemática", "Sala Profs. de Física", "Sala Profs. de Linguagens", "Sala Profs. de C. Biológicas", "Sala Profs. de Mecânica"],
+                "bloco-administrativo": ["RH", "Financeiro", "Coordenação"]
+            };
+
             elementos.forEach(elemento => {
                 const bloco = elemento.id.toLowerCase().replace(/\s+/g, '-');
 
-                // Evento de hover para destaque
-                elemento.addEventListener('mouseenter', function () {
+                // Evento de hover para destaque e exibição da imagem
+                elemento.addEventListener('mouseenter', function (event) {
                     if (!blocoSelecionado) {
                         atividades.forEach(atividade => {
                             if (atividade.dataset.bloco.toLowerCase().replace(/\s+/g, '-') === bloco) {
@@ -303,6 +353,28 @@
                             }
                         });
                     }
+
+                    // Exibir a imagem do bloco correspondente
+                    if (blocos[bloco]) {
+                        tooltipImg.src = blocos[bloco];
+                        listaSalas.innerHTML = ''; // Limpar lista antes de adicionar as salas
+                        salas[bloco].forEach(sala => {
+                            let item = document.createElement('li');
+                            item.textContent = sala;
+                            item.style.borderBottom = '1px solid #ddd';
+                            item.style.padding = '2px 0';
+                            listaSalas.appendChild(item);
+                        });
+                        tooltip.style.display = 'block';
+                        tooltip.style.left = event.pageX + 'px';
+                        tooltip.style.top = event.pageY + 'px';
+                    }
+                });
+
+                // Evento de movimento do mouse para seguir o cursor
+                elemento.addEventListener('mousemove', function (event) {
+                    tooltip.style.left = event.pageX + 10 + 'px';
+                    tooltip.style.top = event.pageY + 10 + 'px';
                 });
 
                 elemento.addEventListener('mouseleave', function () {
@@ -311,12 +383,14 @@
                             atividade.classList.remove(bloco);
                         });
                     }
+
+                    // Esconder a tooltip quando o mouse sair
+                    tooltip.style.display = 'none';
                 });
 
                 // Evento de clique para filtrar atividades
                 elemento.addEventListener('click', function () {
                     if (blocoSelecionado === bloco) {
-                        // Se o mesmo bloco for clicado novamente, remover a filtragem
                         blocoSelecionado = null;
                         atividades.forEach(atividade => {
                             atividade.style.display = 'block';
@@ -337,5 +411,6 @@
                 });
             });
         });
+
     </script>
 @endpush
