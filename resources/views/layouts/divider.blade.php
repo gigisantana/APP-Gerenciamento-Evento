@@ -83,26 +83,134 @@
                             <div class="flex justify-center items-center">
                                 {!! file_get_contents(public_path('images/mapa-IFPR-2.svg')) !!}
                             </div>
-                            <div id="tooltip"></div>
+                            
 
                             <script>
                                 document.addEventListener('DOMContentLoaded', function () {
-                                    const tooltip = document.getElementById('tooltip');
                                     const elementos = document.querySelectorAll('[data-tooltip]');
-                            
+                                
+                                    // Cria a tooltip
+                                    const tooltip = document.createElement('div');
+                                    tooltip.id = 'tooltip';
+                                    tooltip.style.position = 'absolute';
+                                    tooltip.style.display = 'none';
+                                    tooltip.style.border = '1px solid black';
+                                    tooltip.style.background = 'black';
+                                    tooltip.style.padding = '5px';
+                                    tooltip.style.maxWidth = '200px';
+                                    tooltip.style.fontSize = '12px';
+                                    tooltip.style.color = 'white';
+
+                                    const tooltipNomeBloco = document.createElement('div');
+                                    tooltipNomeBloco.style.fontWeight = 'bold';
+                                    tooltipNomeBloco.style.marginBottom = '5px';
+                                    tooltipNomeBloco.style.textAlign = 'center';
+                                    tooltip.appendChild(tooltipNomeBloco);
+                                    
+                                    const tooltipImg = document.createElement('img');
+                                    tooltipImg.style.width = '150px';
+                                    tooltipImg.style.height = '100px';
+                                    tooltip.appendChild(tooltipImg);
+                                
+                                    // Cria um container para informações adicionais (título, divisores, lista de salas)
+                                    const infoContainer = document.createElement('div');
+                                    tooltip.appendChild(infoContainer);
+                                
+                                    document.body.appendChild(tooltip);
+                                
+                                    const blocos = {
+                                        "bloco-didático": "{{ asset('images/didatico.jpg') }}",
+                                        "bloco-de-esportes": "{{ asset('images/esportes.jpg') }}",
+                                        "bloco-de-laboratórios": "{{ asset('images/laboratorio.jpg') }}",
+                                        "bloco-central-1": "{{ asset('images/central1.jpg') }}",
+                                        "bloco-central-2": "{{ asset('images/central2.jpg') }}",
+                                        "bloco-central-3": "{{ asset('images/central3.jpg') }}",
+                                        "bloco-central-4": "{{ asset('images/central4.jpg') }}",
+                                        "bloco-administrativo": "{{ asset('images/administrativo.jpg') }}"
+                                    };
+                                
+                                    const salas = {
+                                        "bloco-didático": [
+                                            { piso: "1º piso", salas: ["Assistência Estudantil", "Lab. Física", "Lab. Química", "Lab. Biologia"]},
+                                            { piso: "2º piso", salas: ["Sala 10", "Sala 11", "Sala 12", "Lab. Informática 0", "Lab. Informática 1", "Lab. Informática 2", "Lab. Informática 3", "Lab. Informática 4", "Lab. Informática 5"]}
+                                        ],
+                                        "bloco-de-esportes": [
+                                            { piso: "1º piso", salas: ["Quadra 1", "Quadra 2", "Vestiário Masculino", "Vestiário Feminino"]}
+                                        ],
+                                        "bloco-de-laboratórios": [
+                                            { piso: "1º piso", salas: ["Lab. de Mecânica (FABLAB)", "Lab. Meio Ambiente", "Lab. Usinagem", "Lab.Materiais", "Lab. CAM/CNC", "Sala de Biologia"]},
+                                            { piso: "2º piso", salas: ["Lab. Metrologia", "Lab. Soldagem", "Lab. Manutenção", "Coord. Manutenção Industrial", "Lab. Automação", "Lab. Projetos", "Lab.Fenômenos de Transporte"]}
+                                        ],
+                                        "bloco-central-1": [
+                                            { piso: "1º piso", salas: ["Auditório", "Sala de Reunião", "Diretoria"] }
+                                        ],
+                                        "bloco-central-2": [
+                                            { piso: "1º piso", salas: ["Biblioteca", "Sala de Estudos", "Computadores"] }
+                                        ],
+                                        "bloco-central-3": [
+                                            { piso: "1º piso", salas: ["Sala dos Professores", "Secretaria"] }
+                                        ],
+                                        "bloco-central-4": [
+                                            { piso: "1º Piso", salas: ["Recepção", "Sala A", "Sala B"] },
+                                            { piso: "2º Piso", salas: ["Salão Principal", "Cantina"] }
+                                        ],
+                                        "bloco-administrativo": [
+                                            { piso: "1º piso", salas: ["RH", "Financeiro", "Coordenação"] }
+                                        ]
+                                    };
+                                
+                                    function montarInfo(blocoKey) {
+                                        infoContainer.innerHTML = ''; // Limpa o container
+                                        
+                                        const infoPisos = salas[blocoKey];
+                                    
+                                        if (Array.isArray(infoPisos)) {
+                                            infoPisos.forEach(p => {
+                                                const titulo = document.createElement('h4');
+                                                titulo.textContent = p.piso;
+                                                titulo.style.margin = '5px 0 2px 0';
+                                                infoContainer.appendChild(titulo);
+                                    
+                                                const divisor = document.createElement('hr');
+                                                divisor.style.border = '0';
+                                                divisor.style.height = '1px';
+                                                divisor.style.backgroundColor = '#ddd';
+                                                infoContainer.appendChild(divisor);
+                                    
+                                                const ul = document.createElement('ul');
+                                                ul.style.listStyle = 'none';
+                                                ul.style.padding = '0';
+                                                ul.style.margin = '0 0 5px 0';
+                                                p.salas.forEach(sala => {
+                                                    const li = document.createElement('li');
+                                                    li.textContent = sala;
+                                                    li.style.padding = '2px 0';
+                                                    ul.appendChild(li);
+                                                });
+                                                infoContainer.appendChild(ul);
+                                            });
+                                        }
+                                    }
+                                
                                     elementos.forEach(elemento => {
+                                        const bloco = elemento.id.toLowerCase().replace(/\s+/g, '-');
+                                        
                                         elemento.addEventListener('mouseenter', function (event) {
-                                            tooltip.innerHTML = elemento.getAttribute('data-tooltip');
-                                            tooltip.style.display = 'block';
-                                            tooltip.style.left = event.pageX + 'px';
-                                            tooltip.style.top = (event.pageY + 10) + 'px';
+                                            if (blocos[bloco]) {
+                                                tooltipNomeBloco.textContent = elemento.id;
+                                                tooltipImg.src = blocos[bloco];
+                                                montarInfo(bloco);
+                                                tooltip.style.display = 'block';
+                                                tooltip.style.left = event.pageX + 'px';
+                                                tooltip.style.top = event.pageY + 'px';
+                                            }
                                         });
-                            
+                                
                                         elemento.addEventListener('mousemove', function (event) {
-                                            tooltip.style.left = event.pageX + 'px';
-                                            tooltip.style.top = (event.pageY + 10) + 'px';
+                                            tooltip.style.left = event.pageX + 10 + 'px';
+                                            tooltip.style.top = event.pageY + 10 + 'px';
                                         });
-                            
+                                
                                         elemento.addEventListener('mouseleave', function () {
                                             tooltip.style.display = 'none';
                                         });
